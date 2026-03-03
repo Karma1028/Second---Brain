@@ -1,0 +1,20 @@
+const fs = require('fs');
+const path = require('path');
+
+function replaceInDir(dir) {
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      replaceInDir(fullPath);
+    } else if (fullPath.endsWith('.tsx')) {
+      let content = fs.readFileSync(fullPath, 'utf8');
+      content = content.replace(/border-white\/5/g, 'border-surface-border');
+      content = content.replace(/border-white\/10/g, 'border-surface-border');
+      fs.writeFileSync(fullPath, content);
+    }
+  }
+}
+
+replaceInDir('./app');
+replaceInDir('./components');

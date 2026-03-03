@@ -1,11 +1,11 @@
-import { Sun, ListTodo, MoreHorizontal, Circle, CheckCircle2, HeartPulse, TrendingUp, BookOpen, Droplets, Link as LinkIcon, FileText, Image as ImageIcon, Plus, Database } from 'lucide-react';
+import { Sun, ListTodo, MoreHorizontal, Circle, CheckCircle2, HeartPulse, TrendingUp, BookOpen, Droplets, Link as LinkIcon, FileText, Image as ImageIcon, Plus, Database, Sparkles } from 'lucide-react';
 
 export default function Dashboard() {
   return (
     <div className="flex-1 overflow-y-auto flex flex-col">
       <header className="px-8 py-8 flex justify-between items-end shrink-0">
         <div>
-          <h1 className="text-white text-3xl font-bold tracking-tight font-display">Good Morning, Architect.</h1>
+          <h1 className="text-foreground text-3xl font-bold tracking-tight font-display">Good Morning, Architect.</h1>
           <p className="text-text-secondary mt-1 text-sm">System operational. 3 critical tasks pending.</p>
         </div>
         <div className="flex items-center gap-4">
@@ -14,7 +14,7 @@ export default function Dashboard() {
             Online
           </div>
           <div className="text-right">
-            <p className="text-white text-sm font-medium">08:42 AM</p>
+            <p className="text-foreground text-sm font-medium">08:42 AM</p>
             <p className="text-text-secondary text-xs">Oct 24, 2023</p>
           </div>
         </div>
@@ -30,7 +30,7 @@ export default function Dashboard() {
                 <Sun className="w-4 h-4" />
                 <span>Daily briefing</span>
               </div>
-              <h2 className="text-white text-2xl font-bold leading-tight font-display">
+              <h2 className="text-foreground text-2xl font-bold leading-tight font-display">
                 Your sleep score is <span className="text-primary">85</span>. Market trends are stable.
               </h2>
               <p className="text-text-secondary text-sm leading-relaxed">
@@ -38,7 +38,7 @@ export default function Dashboard() {
                 Your habit streak for &quot;Deep Work&quot; is at 4 days. Ready to synchronize?
               </p>
             </div>
-            <button className="flex-shrink-0 flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-primary text-background-dark hover:bg-white transition-colors text-sm font-bold">
+            <button className="flex-shrink-0 flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-primary text-background-dark hover:bg-foreground hover:text-background-dark transition-colors text-sm font-bold">
               <span>Start Day</span>
               <span>→</span>
             </button>
@@ -52,11 +52,11 @@ export default function Dashboard() {
             {/* Agenda / Tasks */}
             <div className="rounded-xl border border-surface-border bg-surface-dark p-6 flex flex-col gap-4 h-full">
               <div className="flex items-center justify-between pb-2 border-b border-surface-border/50">
-                <h3 className="text-white text-lg font-bold flex items-center gap-2 font-display">
+                <h3 className="text-foreground text-lg font-bold flex items-center gap-2 font-display">
                   <ListTodo className="w-5 h-5 text-text-secondary" />
                   Agenda
                 </h3>
-                <button className="text-text-secondary hover:text-white transition-colors">
+                <button className="text-text-secondary hover:text-foreground transition-colors">
                   <MoreHorizontal className="w-5 h-5" />
                 </button>
               </div>
@@ -67,7 +67,7 @@ export default function Dashboard() {
                     <Circle className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-white text-sm font-medium">Review Q4 Product Strategy</p>
+                    <p className="text-foreground text-sm font-medium">Review Q4 Product Strategy</p>
                     <p className="text-text-secondary text-xs">Project Alpha • High Priority</p>
                   </div>
                   <div className="px-2 py-1 rounded text-xs bg-red-500/10 text-red-400 font-medium">
@@ -80,7 +80,7 @@ export default function Dashboard() {
                     <Circle className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-white text-sm font-medium">Design System Audit</p>
+                    <p className="text-foreground text-sm font-medium">Design System Audit</p>
                     <p className="text-text-secondary text-xs">UX Team • Medium Priority</p>
                   </div>
                   <div className="px-2 py-1 rounded text-xs bg-surface-border text-text-secondary font-medium">
@@ -109,7 +109,7 @@ export default function Dashboard() {
             {/* Vitals Chart */}
             <div className="rounded-xl border border-surface-border bg-surface-dark p-6 flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-white text-lg font-bold flex items-center gap-2 font-display">
+                <h3 className="text-foreground text-lg font-bold flex items-center gap-2 font-display">
                   <HeartPulse className="w-5 h-5 text-text-secondary" />
                   Vitals
                 </h3>
@@ -118,7 +118,7 @@ export default function Dashboard() {
               <div className="flex flex-col gap-1">
                 <p className="text-text-secondary text-sm font-medium">Sleep Quality vs Mood</p>
                 <div className="flex items-baseline gap-2">
-                  <p className="text-white text-3xl font-bold font-display">Optimal</p>
+                  <p className="text-foreground text-3xl font-bold font-display">Optimal</p>
                   <p className="text-green-500 text-sm font-medium flex items-center gap-1">
                     <TrendingUp className="w-4 h-4" />
                     +5%
@@ -152,7 +152,7 @@ export default function Dashboard() {
                   <span className="text-xs font-mono text-text-secondary">READING</span>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white font-display">12<span className="text-sm text-text-secondary font-normal ml-1">pgs</span></p>
+                  <p className="text-2xl font-bold text-foreground font-display">12<span className="text-sm text-text-secondary font-normal ml-1">pgs</span></p>
                   <div className="w-full bg-surface-border h-1 rounded-full mt-2 overflow-hidden">
                     <div className="bg-blue-400 h-full rounded-full" style={{ width: '45%' }}></div>
                   </div>
@@ -164,7 +164,7 @@ export default function Dashboard() {
                   <span className="text-xs font-mono text-text-secondary">HYDRATION</span>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white font-display">1.2<span className="text-sm text-text-secondary font-normal ml-1">L</span></p>
+                  <p className="text-2xl font-bold text-foreground font-display">1.2<span className="text-sm text-text-secondary font-normal ml-1">L</span></p>
                   <div className="w-full bg-surface-border h-1 rounded-full mt-2 overflow-hidden">
                     <div className="bg-primary h-full rounded-full" style={{ width: '60%' }}></div>
                   </div>
@@ -175,40 +175,88 @@ export default function Dashboard() {
         </div>
 
         {/* Resources / Vault Preview */}
-        <div className="rounded-xl border border-surface-border bg-surface-dark p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-white text-lg font-bold flex items-center gap-2 font-display">
-              <Database className="w-5 h-5 text-text-secondary" />
-              Recent Vault Captures
-            </h3>
-            <a className="text-sm text-primary hover:text-white transition-colors" href="#">View All</a>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="rounded-xl border border-surface-border bg-surface-dark p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-foreground text-lg font-bold flex items-center gap-2 font-display">
+                <Database className="w-5 h-5 text-text-secondary" />
+                Recent Vault Captures
+              </h3>
+              <a className="text-sm text-primary hover:text-foreground transition-colors" href="#">View All</a>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
+                <div className="flex items-center gap-2 mb-2">
+                  <LinkIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
+                  <span className="text-xs text-text-secondary uppercase">Web Clip</span>
+                </div>
+                <p className="text-foreground text-sm font-medium line-clamp-2">Understanding Large Language Models: A Guide for Developers</p>
+              </div>
+              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
+                  <span className="text-xs text-text-secondary uppercase">Note</span>
+                </div>
+                <p className="text-foreground text-sm font-medium line-clamp-2">Ideas for the Q4 marketing campaign sprint</p>
+              </div>
+              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
+                <div className="flex items-center gap-2 mb-2">
+                  <ImageIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
+                  <span className="text-xs text-text-secondary uppercase">Image</span>
+                </div>
+                <p className="text-foreground text-sm font-medium line-clamp-2">Moodboard reference: Cyberpunk architecture</p>
+              </div>
+              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all flex items-center justify-center">
+                <div className="text-text-secondary group-hover:text-primary flex flex-col items-center gap-1 transition-colors">
+                  <Plus className="w-6 h-6" />
+                  <span className="text-xs font-medium">Add New</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
-              <div className="flex items-center gap-2 mb-2">
-                <LinkIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
-                <span className="text-xs text-text-secondary uppercase">Web Clip</span>
+
+          {/* AI Insights List */}
+          <div className="rounded-xl border border-surface-border bg-surface-dark p-6 flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 border border-surface-border">
+                  <Sparkles className="w-5 h-5 text-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-foreground font-bold text-lg font-display">AI Anomaly Detection</h3>
+                  <p className="text-text-secondary text-xs">Based on last 24h biometrics</p>
+                </div>
               </div>
-              <p className="text-white text-sm font-medium line-clamp-2">Understanding Large Language Models: A Guide for Developers</p>
+              <button className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">View All</button>
             </div>
-            <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
-              <div className="flex items-center gap-2 mb-2">
-                <FileText className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
-                <span className="text-xs text-text-secondary uppercase">Note</span>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
+                <div className="mt-1">
+                  <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_#f59e0b]"></div>
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="text-foreground text-sm font-medium group-hover:text-primary transition-colors">Caffeine Threshold Exceeded</h4>
+                    <span className="text-[10px] text-text-secondary">2h ago</span>
+                  </div>
+                  <p className="text-text-secondary text-xs leading-relaxed">
+                    You've consumed 120mg of caffeine after 2 PM. Based on your historical data (R²=0.82), this reduces your deep sleep duration by approximately 45 minutes.
+                  </p>
+                </div>
               </div>
-              <p className="text-white text-sm font-medium line-clamp-2">Ideas for the Q4 marketing campaign sprint</p>
-            </div>
-            <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
-              <div className="flex items-center gap-2 mb-2">
-                <ImageIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
-                <span className="text-xs text-text-secondary uppercase">Image</span>
-              </div>
-              <p className="text-white text-sm font-medium line-clamp-2">Moodboard reference: Cyberpunk architecture</p>
-            </div>
-            <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all flex items-center justify-center">
-              <div className="text-text-secondary group-hover:text-primary flex flex-col items-center gap-1 transition-colors">
-                <Plus className="w-6 h-6" />
-                <span className="text-xs font-medium">Add New</span>
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
+                <div className="mt-1">
+                  <div className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#8b5cf6]"></div>
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="text-foreground text-sm font-medium group-hover:text-secondary transition-colors">Peak Focus Window Incoming</h4>
+                    <span className="text-[10px] text-text-secondary">Now</span>
+                  </div>
+                  <p className="text-text-secondary text-xs leading-relaxed">
+                    Your circadian rhythm suggests your highest cognitive output window is between 10:00 AM and 11:30 AM. Suggested task: "Q3 Strategy Planning".
+                  </p>
+                </div>
               </div>
             </div>
           </div>

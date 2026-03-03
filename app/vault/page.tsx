@@ -10,7 +10,7 @@ export default function VaultPage() {
             <Database className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight font-display">Knowledge Vault</h1>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight font-display">Knowledge Vault</h1>
             <p className="text-text-secondary text-sm">1,204 items • 45 tags</p>
           </div>
         </div>
@@ -21,7 +21,7 @@ export default function VaultPage() {
             <input 
               type="text" 
               placeholder="Search vault..." 
-              className="bg-surface-dark border border-surface-border rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 w-64 transition-all placeholder:text-text-secondary"
+              className="bg-surface-dark border border-surface-border rounded-lg pl-10 pr-4 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 w-64 transition-all placeholder:text-text-secondary"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
               <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-surface-border text-text-secondary rounded border border-surface-border/50">⌘</kbd>
@@ -30,19 +30,19 @@ export default function VaultPage() {
           </div>
           
           <div className="flex items-center bg-surface-dark border border-surface-border rounded-lg p-1">
-            <button className="p-1.5 rounded-md bg-surface-border text-white shadow-sm">
+            <button className="p-1.5 rounded-md bg-surface-border text-foreground shadow-sm">
               <LayoutGrid className="w-4 h-4" />
             </button>
-            <button className="p-1.5 rounded-md text-text-secondary hover:text-white transition-colors">
+            <button className="p-1.5 rounded-md text-text-secondary hover:text-foreground transition-colors">
               <List className="w-4 h-4" />
             </button>
           </div>
 
-          <button className="p-2 rounded-lg border border-surface-border bg-surface-dark text-text-secondary hover:text-white hover:border-primary/30 transition-all">
+          <button className="p-2 rounded-lg border border-surface-border bg-surface-dark text-text-secondary hover:text-foreground hover:border-primary/30 transition-all">
             <Filter className="w-4 h-4" />
           </button>
           
-          <button className="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-white transition-colors shadow-lg shadow-primary/20">
+          <button className="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-colors shadow-lg shadow-primary/20">
             <Plus className="w-4 h-4" />
             <span>New Entry</span>
           </button>
@@ -62,14 +62,14 @@ export default function VaultPage() {
                 </div>
                 <span className="text-xs">1.2k</span>
               </a>
-              <a href="#" className="flex items-center justify-between px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-white transition-colors text-sm">
+              <a href="#" className="flex items-center justify-between px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4" />
                   <span>Favorites</span>
                 </div>
                 <span className="text-xs">24</span>
               </a>
-              <a href="#" className="flex items-center justify-between px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-white transition-colors text-sm">
+              <a href="#" className="flex items-center justify-between px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
                   <span>Recent</span>
@@ -84,22 +84,22 @@ export default function VaultPage() {
               <button className="text-text-secondary hover:text-primary transition-colors"><Plus className="w-3 h-3" /></button>
             </div>
             <nav className="flex flex-col gap-1">
-              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-white transition-colors text-sm group">
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
                 <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                 <Folder className="w-4 h-4 text-blue-400" />
                 <span>Projects</span>
               </a>
-              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-white transition-colors text-sm group">
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
                 <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                 <Folder className="w-4 h-4 text-emerald-400" />
                 <span>Learning</span>
               </a>
-              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-white transition-colors text-sm group">
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
                 <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                 <Folder className="w-4 h-4 text-rose-400" />
                 <span>Inspiration</span>
               </a>
-              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-white transition-colors text-sm group">
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
                 <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                 <Folder className="w-4 h-4 text-amber-400" />
                 <span>Archive</span>
@@ -110,19 +110,19 @@ export default function VaultPage() {
           <div className="p-4 border-t border-surface-border flex-1">
             <h3 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-3 px-2">Tags</h3>
             <div className="flex flex-wrap gap-2 px-2">
-              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-white hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
                 <Hash className="w-3 h-3" /> architecture
               </span>
-              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-white hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
                 <Hash className="w-3 h-3" /> design
               </span>
-              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-white hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
                 <Hash className="w-3 h-3" /> ai
               </span>
-              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-white hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
                 <Hash className="w-3 h-3" /> notes
               </span>
-              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-white hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
                 <Hash className="w-3 h-3" /> ideas
               </span>
             </div>
@@ -142,11 +142,11 @@ export default function VaultPage() {
                 <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
                   <FileText className="w-4 h-4" />
                 </div>
-                <button className="text-text-secondary hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                   <MoreVertical className="w-4 h-4" />
                 </button>
               </div>
-              <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 font-display">Meeting Notes: Q4 Strategy Planning</h3>
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">Meeting Notes: Q4 Strategy Planning</h3>
               <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
                 Discussed the new product launch timeline. Key action items include finalizing the design system and setting up the staging environment. Need to follow up with marketing on the campaign assets.
               </p>
@@ -166,11 +166,11 @@ export default function VaultPage() {
                 <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
                   <LinkIcon className="w-4 h-4" />
                 </div>
-                <button className="text-text-secondary hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                   <MoreVertical className="w-4 h-4" />
                 </button>
               </div>
-              <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 font-display">The Future of Generative UI</h3>
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">The Future of Generative UI</h3>
               <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
                 An interesting article on how AI models are moving beyond text generation to creating dynamic user interfaces on the fly. Good reference for the upcoming project.
               </p>
@@ -190,7 +190,7 @@ export default function VaultPage() {
             {/* Image Card */}
             <div className="bg-surface-dark border border-surface-border rounded-xl p-0 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
               <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button className="p-1.5 bg-background-dark/80 backdrop-blur-sm rounded-md text-white hover:bg-primary hover:text-background-dark transition-colors">
+                <button className="p-1.5 bg-background-dark/80 backdrop-blur-sm rounded-md text-foreground hover:bg-primary hover:text-background-dark transition-colors">
                   <MoreVertical className="w-4 h-4" />
                 </button>
               </div>
@@ -202,7 +202,7 @@ export default function VaultPage() {
                 </div>
               </div>
               <div className="p-4 flex flex-col flex-1">
-                <h3 className="text-white font-bold text-sm mb-1 line-clamp-1 font-display">Cyberpunk Cityscape Reference</h3>
+                <h3 className="text-foreground font-bold text-sm mb-1 line-clamp-1 font-display">Cyberpunk Cityscape Reference</h3>
                 <p className="text-text-secondary text-xs line-clamp-2 mb-auto">
                   Moodboard inspiration for the new landing page hero section. Love the neon accents.
                 </p>
@@ -222,11 +222,11 @@ export default function VaultPage() {
                 <div className="p-2 bg-amber-500/10 rounded-lg text-amber-400">
                   <FileText className="w-4 h-4" />
                 </div>
-                <button className="text-text-secondary hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                   <MoreVertical className="w-4 h-4" />
                 </button>
               </div>
-              <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 font-display">App Architecture Ideas</h3>
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">App Architecture Ideas</h3>
               <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1 font-mono bg-background-dark p-2 rounded border border-surface-border/50">
                 {`interface VaultItem {
   id: string;
@@ -251,16 +251,16 @@ export default function VaultPage() {
                 <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
                   <LinkIcon className="w-4 h-4" />
                 </div>
-                <button className="text-text-secondary hover:text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
                   <MoreVertical className="w-4 h-4" />
                 </button>
               </div>
-              <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 font-display">Tailwind CSS v4 Documentation</h3>
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">Tailwind CSS v4 Documentation</h3>
               <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
                 The new engine is incredibly fast. Need to review the changes to the configuration file and the new CSS-first approach.
               </p>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-4 h-4 rounded-full bg-[#38bdf8] flex items-center justify-center text-[8px] text-white font-bold">T</div>
+                <div className="w-4 h-4 rounded-full bg-[#38bdf8] flex items-center justify-center text-[8px] text-foreground font-bold">T</div>
                 <span className="text-xs text-text-secondary truncate">tailwindcss.com/docs</span>
               </div>
               <div className="flex items-center justify-between mt-auto pt-4 border-t border-surface-border/50">

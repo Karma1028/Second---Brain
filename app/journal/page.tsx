@@ -7,7 +7,7 @@ export default function JournalPage() {
       <div className="w-80 flex flex-col border-r border-surface-border bg-surface-dark/30 shrink-0">
         <div className="p-6 border-b border-surface-border">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-white font-display flex items-center gap-2">
+            <h2 className="text-xl font-bold text-foreground font-display flex items-center gap-2">
               <Book className="w-5 h-5 text-primary" />
               Journal
             </h2>
@@ -19,9 +19,9 @@ export default function JournalPage() {
           {/* Mini Calendar */}
           <div className="bg-surface-dark border border-surface-border rounded-xl p-4">
             <div className="flex items-center justify-between mb-4">
-              <button className="text-text-secondary hover:text-white"><ChevronLeft className="w-4 h-4" /></button>
-              <span className="text-sm font-bold text-white">October 2023</span>
-              <button className="text-text-secondary hover:text-white"><ChevronRight className="w-4 h-4" /></button>
+              <button className="text-text-secondary hover:text-foreground"><ChevronLeft className="w-4 h-4" /></button>
+              <span className="text-sm font-bold text-foreground">October 2023</span>
+              <button className="text-text-secondary hover:text-foreground"><ChevronRight className="w-4 h-4" /></button>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center mb-2">
               {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
@@ -43,8 +43,8 @@ export default function JournalPage() {
                   <div 
                     key={day} 
                     className={`h-6 w-6 mx-auto rounded-full flex items-center justify-center text-xs cursor-pointer transition-all
-                      ${isToday ? 'bg-primary text-background-dark font-bold shadow-[0_0_10px_rgba(13,242,242,0.5)]' : 
-                        hasEntry ? 'text-white hover:bg-surface-border' : 'text-text-secondary hover:text-white hover:bg-surface-border/50'
+                      ${isToday ? 'bg-primary text-background-dark font-bold shadow-lg shadow-primary/50' : 
+                        hasEntry ? 'text-foreground hover:bg-surface-border' : 'text-text-secondary hover:text-foreground hover:bg-surface-border/50'
                       }
                     `}
                   >
@@ -67,7 +67,7 @@ export default function JournalPage() {
               <span className="text-xs font-medium text-primary">Today, 08:30 AM</span>
               <Smile className="w-4 h-4 text-green-400" />
             </div>
-            <h4 className="text-white text-sm font-bold mb-1 truncate">Morning Reflections & Planning</h4>
+            <h4 className="text-foreground text-sm font-bold mb-1 truncate">Morning Reflections & Planning</h4>
             <p className="text-text-secondary text-xs line-clamp-2">Woke up feeling refreshed after a solid 7.5 hours of sleep. The new morning routine is definitely helping...</p>
           </div>
 
@@ -76,7 +76,7 @@ export default function JournalPage() {
               <span className="text-xs font-medium text-text-secondary">Yesterday, 09:15 PM</span>
               <Meh className="w-4 h-4 text-amber-400" />
             </div>
-            <h4 className="text-slate-300 text-sm font-bold mb-1 truncate">End of Day Dump</h4>
+            <h4 className="text-foreground text-sm font-bold mb-1 truncate">End of Day Dump</h4>
             <p className="text-text-secondary text-xs line-clamp-2">Productive day but feeling a bit mentally drained. The architecture review took longer than expected...</p>
           </div>
 
@@ -85,7 +85,7 @@ export default function JournalPage() {
               <span className="text-xs font-medium text-text-secondary">Oct 22, 07:00 AM</span>
               <Smile className="w-4 h-4 text-green-400" />
             </div>
-            <h4 className="text-slate-300 text-sm font-bold mb-1 truncate">Weekend Ideas</h4>
+            <h4 className="text-foreground text-sm font-bold mb-1 truncate">Weekend Ideas</h4>
             <p className="text-text-secondary text-xs line-clamp-2">Had a great idea for a new side project while running. Need to sketch out the initial UI concepts...</p>
           </div>
         </div>
@@ -107,8 +107,8 @@ export default function JournalPage() {
               <button className="p-1.5 rounded-md text-text-secondary hover:text-amber-400 hover:bg-amber-400/10 transition-colors"><Meh className="w-4 h-4" /></button>
               <button className="p-1.5 rounded-md text-text-secondary hover:text-rose-400 hover:bg-rose-400/10 transition-colors"><Frown className="w-4 h-4" /></button>
             </div>
-            <button className="p-2 text-text-secondary hover:text-white transition-colors"><MoreHorizontal className="w-5 h-5" /></button>
-            <button className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-white transition-colors">Save</button>
+            <button className="p-2 text-text-secondary hover:text-foreground transition-colors"><MoreHorizontal className="w-5 h-5" /></button>
+            <button className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-colors">Save</button>
           </div>
         </header>
 
@@ -117,7 +117,7 @@ export default function JournalPage() {
             <input 
               type="text" 
               defaultValue="Morning Reflections & Planning"
-              className="w-full bg-transparent text-4xl font-bold text-white font-display border-none outline-none mb-6 placeholder:text-surface-border focus:ring-0 p-0"
+              className="w-full bg-transparent text-4xl font-bold text-foreground font-display border-none outline-none mb-6 placeholder:text-surface-border focus:ring-0 p-0"
               placeholder="Entry Title..."
             />
             
@@ -128,12 +128,12 @@ export default function JournalPage() {
               <span className="px-2 py-1 rounded-md bg-surface-dark border border-surface-border text-xs text-text-secondary flex items-center gap-1">
                 <Tag className="w-3 h-3" /> planning
               </span>
-              <button className="px-2 py-1 rounded-md border border-dashed border-surface-border text-xs text-text-secondary hover:text-white hover:border-primary/50 transition-colors flex items-center gap-1">
+              <button className="px-2 py-1 rounded-md border border-dashed border-surface-border text-xs text-text-secondary hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1">
                 <Plus className="w-3 h-3" /> Add Tag
               </button>
             </div>
 
-            <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-white prose-a:text-primary max-w-none font-sans text-lg leading-relaxed">
+            <div className="prose prose-invert prose-p:text-foreground prose-headings:text-foreground prose-a:text-primary max-w-none font-sans text-lg leading-relaxed">
               <p>Woke up feeling refreshed after a solid 7.5 hours of sleep. The new morning routine is definitely helping set a better tone for the day. I didn&apos;t check my phone for the first hour and spent 15 minutes meditating.</p>
               
               <h3>Today&apos;s Focus</h3>
