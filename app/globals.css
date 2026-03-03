@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-primary: #0df2f2;
+  --color-primary-dim: #089191;
+  --color-secondary: #8b5cf6;
+  --color-accent-orange: #f25c0d;
+  --color-background-light: #f5f8f8;
+  --color-background-dark: #102222;
+  --color-surface-dark: #162a2a;
+  --color-surface-darker: #0d1b1b;
+  --color-surface-border: #283939;
+  --color-text-secondary: #9cbaba;
+}
