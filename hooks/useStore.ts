@@ -32,6 +32,10 @@ interface AppState {
     fetchAllData: () => Promise<void>;
     addTask: (task: Task) => Promise<void>;
     updateTaskProgress: (id: string, progress: number) => Promise<void>;
+    toggleHabitLog: (habitId: string, date: string) => void;
+    addJournalEntry: (entry: JournalEntry) => void;
+    updateJournalMood: (id: string, mood: JournalEntry['mood']) => void;
+    addVaultItem: (item: VaultItem) => void;
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -73,15 +77,49 @@ export const useStore = create<AppState>((set, get) => ({
         // Optimistic update
         set((state) => ({
             tasks: state.tasks.map((t) =>
-                t.id === id ? { ...t, progress_percentage: progress } : t
+                t.id === id ? { ...t, progress_percentage: progress, status: progress === 100 ? 'done' : 'in_progress' } : t
             ),
         }));
         try {
-            await gasUpdateTask(id, { progress_percentage: progress });
+            await gasUpdateTask(id, { progress_percentage: progress, status: progress === 100 ? 'done' : 'in_progress' });
         } catch {
             // Rollback on failure
             set({ tasks: previous });
         }
+    },
+
+    toggleHabitLog: (habitId: string, date: string) => {
+        set((state) => {
+            const existingLog = state.habitLogs.find(l => l.habit_id === habitId && l.date === date);
+            if (existingLog && existingLog.status === 'done') {
+                return { habitLogs: state.habitLogs.filter(l => !(l.habit_id === habitId && l.date === date)) };
+            } else {
+                const newLog = {
+                    id: crypto.randomUUID(),
+                    habit_id: habitId,
+                    date: date,
+                    status: 'done' as const,
+                    value: 0
+                };
+                return { habitLogs: [...state.habitLogs, newLog] };
+            }
+        });
+    },
+
+    addJournalEntry: (entry: JournalEntry) => {
+        set((state) => ({ journals: [entry, ...state.journals] }));
+    },
+
+    updateJournalMood: (id: string, mood: JournalEntry['mood']) => {
+        set((state) => ({
+            journals: state.journals.map((j) =>
+                j.id === id ? { ...j, mood } : j
+            )
+        }));
+    },
+
+    addVaultItem: (item: VaultItem) => {
+        set((state) => ({ vaultItems: [item, ...state.vaultItems] }));
     },
 }));
 

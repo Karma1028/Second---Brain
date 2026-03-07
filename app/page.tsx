@@ -3,6 +3,7 @@
 import { Sun, ListTodo, MoreHorizontal, Circle, CheckCircle2, HeartPulse, TrendingUp, BookOpen, Droplets, Link as LinkIcon, FileText, Image as ImageIcon, Plus, Database, Sparkles } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
 import { TaskItem, VaultItem, AIInsight, LifeMetric } from '@/types';
+import { toast } from 'sonner';
 
 // Helper to render the right icon for vault items
 const getVaultIcon = (type: VaultItem['type']) => {
@@ -21,7 +22,8 @@ export default function Dashboard() {
     vaultItems,
     aiInsights,
     lifeMetrics,
-    isLoading
+    isLoading,
+    updateTaskProgress
   } = useStore();
 
   const currentTasks = tasks.filter(t => t.status !== 'done').slice(0, 3);
@@ -65,8 +67,12 @@ export default function Dashboard() {
                 Ready to synchronize?
               </p>
             </div>
-            <button className="flex-shrink-0 flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-primary text-background-dark hover:bg-foreground hover:text-background-dark transition-colors text-sm font-bold">
-              <span>Start Day</span>
+            <button
+              onClick={() => {
+                toast.success('Day started successfully!');
+              }}
+              className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
+            >      <span>Start Day</span>
               <span>→</span>
             </button>
           </div>
@@ -89,7 +95,7 @@ export default function Dashboard() {
               </div>
               <div className="flex flex-col gap-3">
                 {currentTasks.map(task => (
-                  <div key={task.id} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer">
+                  <div key={task.id} onClick={() => { updateTaskProgress(task.id, 100); toast.success('Task marked as done!'); }} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer">
                     <div className="flex-shrink-0 text-text-secondary group-hover:text-primary transition-colors">
                       <Circle className="w-5 h-5" />
                     </div>
@@ -218,12 +224,15 @@ export default function Dashboard() {
                   <p className="text-foreground text-sm font-medium line-clamp-2">{item.title}</p>
                 </div>
               ))}
-              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all flex items-center justify-center">
+              <button
+                onClick={() => toast.info('New entry creation opened...')}
+                className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all duration-200 active:scale-95 flex items-center justify-center"
+              >
                 <div className="text-text-secondary group-hover:text-primary flex flex-col items-center gap-1 transition-colors">
                   <Plus className="w-6 h-6" />
                   <span className="text-xs font-medium">Add New</span>
                 </div>
-              </div>
+              </button>
             </div>
           </div>
 
@@ -239,7 +248,10 @@ export default function Dashboard() {
                   <p className="text-text-secondary text-xs">Based on latest intel core analysis</p>
                 </div>
               </div>
-              <button className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">View All</button>
+              <button
+                onClick={() => toast.info('Navigating to detailed insights...')}
+                className="text-xs font-medium text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95"
+              >View All</button>
             </div>
             <div className="flex flex-col gap-3">
               {aiInsights.slice(0, 2).map((insight, idx) => (

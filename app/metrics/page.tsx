@@ -2,6 +2,7 @@
 
 import { Moon, Brain, Battery, Coffee, MoreHorizontal, TrendingUp, TrendingDown, Sparkles } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
+import { toast } from 'sonner';
 
 export default function MetricsPage() {
   const { lifeMetrics, aiInsights } = useStore();
@@ -33,10 +34,10 @@ export default function MetricsPage() {
           <p className="text-text-secondary text-sm">Biometrics & Productivity Correlation Analysis</p>
         </div>
         <div className="flex items-center gap-4 bg-surface-dark border border-surface-border p-1 rounded-xl">
-          <button className="px-4 py-1.5 text-xs font-medium text-foreground bg-primary/20 rounded-lg border border-primary/20 shadow-sm transition-all hover:bg-primary/30">Today</button>
-          <button className="px-4 py-1.5 text-xs font-medium text-text-secondary hover:text-foreground transition-colors">7D</button>
-          <button className="px-4 py-1.5 text-xs font-medium text-text-secondary hover:text-foreground transition-colors">30D</button>
-          <button className="px-4 py-1.5 text-xs font-medium text-text-secondary hover:text-foreground transition-colors">All</button>
+          <button onClick={() => toast.success('Filter applied: Today')} className="px-4 py-1.5 text-xs font-medium text-foreground bg-primary/20 rounded-lg border border-primary/20 shadow-sm transition-all duration-200 active:scale-95 hover:bg-primary/30">Today</button>
+          <button onClick={() => toast.success('Filter applied: Last 7 Days')} className="px-4 py-1.5 text-xs font-medium text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95">7D</button>
+          <button onClick={() => toast.success('Filter applied: Last 30 Days')} className="px-4 py-1.5 text-xs font-medium text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95">30D</button>
+          <button onClick={() => toast.success('Filter applied: All Time')} className="px-4 py-1.5 text-xs font-medium text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95">All</button>
         </div>
       </header>
 
@@ -114,7 +115,7 @@ export default function MetricsPage() {
                 <h3 className="text-foreground font-bold text-lg font-display">Balance Analysis</h3>
                 <p className="text-text-secondary text-xs">Multi-variable correlation</p>
               </div>
-              <button className="text-text-secondary hover:text-primary transition-colors">
+              <button onClick={() => toast.info('Advanced chart settings...')} className="text-text-secondary hover:text-primary transition-all duration-200 active:scale-95">
                 <MoreHorizontal className="w-5 h-5" />
               </button>
             </div>
@@ -250,7 +251,7 @@ export default function MetricsPage() {
                   <p className="text-text-secondary text-xs">Based on last 24h biometrics</p>
                 </div>
               </div>
-              <button className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">View All Analysis</button>
+              <button onClick={() => toast.info('Navigating to Detailed Analysis...')} className="text-xs font-medium text-primary hover:text-primary/80 transition-all duration-200 active:scale-95">View All Analysis</button>
             </div>
             <div className="flex flex-col gap-3">
               {biometricInsights.length > 0 ? (

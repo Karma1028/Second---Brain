@@ -2,9 +2,10 @@
 import { useState } from 'react';
 import { Book, Calendar as CalendarIcon, Edit3, ChevronLeft, ChevronRight, MoreHorizontal, Smile, Frown, Meh, Hash, Tag, Clock, Plus } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
+import { toast } from 'sonner';
 
 export default function JournalPage() {
-  const { journals } = useStore();
+  const { journals, updateJournalMood } = useStore();
   const [activeJournalId, setActiveJournalId] = useState<string | null>(null);
 
   const activeJournal = activeJournalId
@@ -25,7 +26,10 @@ export default function JournalPage() {
               <Book className="w-5 h-5 text-primary" />
               Journal
             </h2>
-            <button className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+            <button
+              onClick={() => toast.info('New journal entry creation...')}
+              className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-200 active:scale-95"
+            >
               <Edit3 className="w-4 h-4" />
             </button>
           </div>
@@ -111,12 +115,39 @@ export default function JournalPage() {
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center bg-surface-dark border border-surface-border rounded-lg p-1">
-              <button className={`p-1.5 rounded-md transition-colors ${activeJournal?.mood === 'great' || activeJournal?.mood === 'good' ? 'text-green-400 bg-green-400/10' : 'text-text-secondary hover:text-green-400 hover:bg-green-400/10'}`}><Smile className="w-4 h-4" /></button>
-              <button className={`p-1.5 rounded-md transition-colors ${activeJournal?.mood === 'neutral' ? 'text-amber-400 bg-amber-400/10' : 'text-text-secondary hover:text-amber-400 hover:bg-amber-400/10'}`}><Meh className="w-4 h-4" /></button>
-              <button className={`p-1.5 rounded-md transition-colors ${activeJournal?.mood === 'bad' || activeJournal?.mood === 'awful' ? 'text-rose-400 bg-rose-400/10' : 'text-text-secondary hover:text-rose-400 hover:bg-rose-400/10'}`}><Frown className="w-4 h-4" /></button>
+              <button
+                onClick={() => {
+                  if (activeJournal) {
+                    updateJournalMood(activeJournal.id, 'great');
+                    toast.success('Mood updated to Happy');
+                  }
+                }}
+                className={`p-1.5 rounded-md transition-all duration-200 active:scale-90 ${activeJournal?.mood === 'great' || activeJournal?.mood === 'good' ? 'text-green-400 bg-green-400/10' : 'text-text-secondary hover:text-green-400 hover:bg-green-400/10'}`}>
+                <Smile className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => {
+                  if (activeJournal) {
+                    updateJournalMood(activeJournal.id, 'neutral');
+                    toast.success('Mood updated to Neutral');
+                  }
+                }}
+                className={`p-1.5 rounded-md transition-all duration-200 active:scale-90 ${activeJournal?.mood === 'neutral' ? 'text-amber-400 bg-amber-400/10' : 'text-text-secondary hover:text-amber-400 hover:bg-amber-400/10'}`}>
+                <Meh className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => {
+                  if (activeJournal) {
+                    updateJournalMood(activeJournal.id, 'bad');
+                    toast.success('Mood updated to Sad');
+                  }
+                }}
+                className={`p-1.5 rounded-md transition-all duration-200 active:scale-90 ${activeJournal?.mood === 'bad' || activeJournal?.mood === 'awful' ? 'text-rose-400 bg-rose-400/10' : 'text-text-secondary hover:text-rose-400 hover:bg-rose-400/10'}`}>
+                <Frown className="w-4 h-4" />
+              </button>
             </div>
-            <button className="p-2 text-text-secondary hover:text-foreground transition-colors"><MoreHorizontal className="w-5 h-5" /></button>
-            <button className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-colors">Save</button>
+            <button onClick={() => toast.info('More options menu opening...')} className="p-2 text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95"><MoreHorizontal className="w-5 h-5" /></button>
+            <button onClick={() => toast.success('Journal entry saved!')} className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 shadow-lg shadow-primary/20">Save</button>
           </div>
         </header>
 
@@ -137,7 +168,7 @@ export default function JournalPage() {
                     <Tag className="w-3 h-3" /> {tag.trim()}
                   </span>
                 ))}
-                <button className="px-2 py-1 rounded-md border border-dashed border-surface-border text-xs text-text-secondary hover:text-foreground hover:border-primary/50 transition-colors flex items-center gap-1">
+                <button onClick={() => toast.info('Tag editor opening...')} className="px-2 py-1 rounded-md border border-dashed border-surface-border text-xs text-text-secondary hover:text-foreground hover:border-primary/50 transition-all duration-200 active:scale-95 flex items-center gap-1">
                   <Plus className="w-3 h-3" /> Add Tag
                 </button>
               </div>

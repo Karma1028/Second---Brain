@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: 'The operating system for your mind.',
 };
 
+import { Toaster } from 'sonner';
+
 export default function RootLayout({
   children,
 }: {
@@ -23,6 +25,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-background-dark text-foreground antialiased overflow-hidden h-screen flex`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <StoreInitializer>
+            <Toaster position="bottom-right" theme="dark" />
             <Sidebar />
             <main className="flex-1 flex flex-col h-full overflow-hidden bg-background-dark relative">
               {children}

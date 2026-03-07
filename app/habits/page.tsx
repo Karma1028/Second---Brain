@@ -2,9 +2,10 @@
 
 import { ChevronLeft, ChevronRight, Plus, Check, Flame, Activity, TrendingUp, Calendar as CalendarIcon, Moon } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
+import { toast } from 'sonner';
 
 export default function HabitsPage() {
-  const { habits, habitLogs, lifeMetrics, journals } = useStore();
+  const { habits, habitLogs, lifeMetrics, journals, toggleHabitLog } = useStore();
 
   const getDaysArray = function (numDays = 15) {
     const daysArr = [];
@@ -75,15 +76,18 @@ export default function HabitsPage() {
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-surface-dark border border-surface-border rounded-lg p-1">
-            <button className="p-1 hover:bg-surface-border rounded text-text-secondary hover:text-foreground transition-colors">
+            <button className="p-1 hover:bg-surface-border rounded text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95">
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span className="text-sm font-medium px-2 text-foreground">{currentMonthYear}</span>
-            <button className="p-1 hover:bg-surface-border rounded text-text-secondary hover:text-foreground transition-colors">
+            <button className="p-1 hover:bg-surface-border rounded text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <button className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-colors flex items-center gap-2 shadow-lg shadow-primary/20">
+          <button
+            onClick={() => toast.info('New habit creation opening...')}
+            className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
+          >
             <Plus className="w-4 h-4" /> New Habit
           </button>
         </div>
@@ -121,12 +125,21 @@ export default function HabitsPage() {
                 <div className="flex-1 flex">
                   {days.map((_, dIdx) => {
                     const isDone = habit.completions.includes(dIdx);
+                    const dateStr = days[dIdx].fullDate;
+
                     return (
                       <div key={dIdx} className="flex-1 flex items-center justify-center border-l border-surface-border/50 p-1 min-w-[40px]">
-                        <button className={`w-full h-8 rounded flex items-center justify-center transition-all ${isDone
-                          ? 'bg-primary text-background-dark shadow-[0_0_10px_rgba(13,242,242,0.3)]'
-                          : 'hover:bg-surface-border/50 text-transparent hover:text-text-secondary/50'
-                          }`}>
+                        <button
+                          onClick={() => {
+                            toggleHabitLog(habit.id, dateStr);
+                            if (!isDone) {
+                              toast.success(`Completed ${habit.name}!`);
+                            }
+                          }}
+                          className={`w-full h-8 rounded flex items-center justify-center transition-all duration-200 active:scale-90 ${isDone
+                            ? 'bg-primary text-background-dark shadow-[0_0_10px_rgba(13,242,242,0.3)]'
+                            : 'hover:bg-surface-border/50 text-transparent hover:text-text-secondary/50'
+                            }`}>
                           <Check className="w-4 h-4" />
                         </button>
                       </div>
