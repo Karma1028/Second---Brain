@@ -1,16 +1,56 @@
-"use client";
+'use client';
+
 import { useState } from 'react';
-import { Book, Calendar as CalendarIcon, Edit3, ChevronLeft, ChevronRight, MoreHorizontal, Smile, Frown, Meh, Hash, Tag, Clock, Plus } from 'lucide-react';
+import { Book, Calendar as CalendarIcon, Edit3, ChevronLeft, ChevronRight, MoreHorizontal, Smile, Frown, Meh, Hash, Tag, Clock, Plus, X } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
 import { toast } from 'sonner';
 
 export default function JournalPage() {
-  const { journals, updateJournalMood } = useStore();
+  const { journals, updateJournalMood, addJournalEntry } = useStore();
   const [activeJournalId, setActiveJournalId] = useState<string | null>(null);
+
+  const [isNewJournalModalOpen, setIsNewJournalModalOpen] = useState(false);
+  const [journalTitle, setJournalTitle] = useState('');
+  const [journalContent, setJournalContent] = useState('');
+  const [journalMood, setJournalMood] = useState<'great' | 'good' | 'neutral' | 'bad' | 'awful'>('good');
+  const [journalTags, setJournalTags] = useState('');
 
   const activeJournal = activeJournalId
     ? journals.find(j => j.id === activeJournalId)
     : journals[0];
+
+  const handleCreateJournal = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!journalTitle) {
+      toast.error('Please enter a title');
+      return;
+    }
+
+    try {
+      const now = new Date();
+      await addJournalEntry({
+        id: crypto.randomUUID(),
+        date: now.toISOString().split('T')[0],
+        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        title: journalTitle,
+        content: journalContent,
+        mood: journalMood,
+        tags: journalTags
+      });
+
+      toast.success('Journal entry created!');
+      setIsNewJournalModalOpen(false);
+      setJournalTitle('');
+      setJournalContent('');
+      setJournalMood('good');
+      setJournalTags('');
+
+      // Auto-select the newly created journal entry based on the current implementation behavior:
+      // It's placed in the state, so we can let the user pick it or wait till reload if it's not perfectly syncing immediately
+    } catch (error) {
+      toast.error('Failed to create journal entry');
+    }
+  };
 
   const recentJournals = [...journals].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   const currentMonthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -27,7 +67,7 @@ export default function JournalPage() {
               Journal
             </h2>
             <button
-              onClick={() => toast.info('New journal entry creation...')}
+              onClick={() => setIsNewJournalModalOpen(true)}
               className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-200 active:scale-95"
             >
               <Edit3 className="w-4 h-4" />
@@ -184,6 +224,87 @@ export default function JournalPage() {
           )}
         </div>
       </div>
+
+      {isNewJournalModalOpen && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-surface border border-surface-border rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between p-4 border-b border-surface-border">
+              <h2 className="text-lg font-bold text-foreground font-display">New Journal Entry</h2>
+              <button
+                onClick={() => setIsNewJournalModalOpen(false)}
+                className="text-text-secondary hover:text-foreground transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateJournal} className="p-4 space-y-4">
+              <div>
+                <input
+                  type="text"
+                  value={journalTitle}
+                  onChange={(e) => setJournalTitle(e.target.value)}
+                  placeholder="Entry Title..."
+                  className="w-full bg-transparent text-2xl font-bold text-foreground font-display border-none outline-none placeholder:text-surface-border focus:ring-0 p-0"
+                  autoFocus
+                />
+              </div>
+
+              <div>
+                <textarea
+                  value={journalContent}
+                  onChange={(e) => setJournalContent(e.target.value)}
+                  className="w-full h-48 bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors resize-none"
+                  placeholder="Write your thoughts..."
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">Mood</label>
+                  <select
+                    value={journalMood}
+                    onChange={(e) => setJournalMood(e.target.value as any)}
+                    className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors"
+                  >
+                    <option value="great">Great</option>
+                    <option value="good">Good</option>
+                    <option value="neutral">Neutral</option>
+                    <option value="bad">Bad</option>
+                    <option value="awful">Awful</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">Tags (comma separated)</label>
+                  <input
+                    type="text"
+                    value={journalTags}
+                    onChange={(e) => setJournalTags(e.target.value)}
+                    placeholder="e.g. personal, reflection, work"
+                    className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsNewJournalModalOpen(false)}
+                  className="px-4 py-2 text-text-secondary hover:text-foreground font-medium transition-colors active:scale-95"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary hover:bg-opacity-90 text-background-dark font-medium rounded-lg transition-all active:scale-95 shadow-lg shadow-primary/20"
+                >
+                  Save Entry
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

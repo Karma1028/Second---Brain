@@ -1,11 +1,37 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Plus, Check, Flame, Activity, TrendingUp, Calendar as CalendarIcon, Moon } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight, Plus, Check, Flame, Activity, TrendingUp, Calendar as CalendarIcon, Moon, X } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
 import { toast } from 'sonner';
 
 export default function HabitsPage() {
-  const { habits, habitLogs, lifeMetrics, journals, toggleHabitLog } = useStore();
+  const { habits, habitLogs, lifeMetrics, journals, toggleHabitLog, addHabit } = useStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [habitName, setHabitName] = useState('');
+  const [habitTarget, setHabitTarget] = useState('1');
+  const [habitUnit, setHabitUnit] = useState('times');
+
+  const handleCreateHabit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!habitName.trim()) {
+      toast.error('Habit name is required');
+      return;
+    }
+
+    await addHabit({
+      id: crypto.randomUUID(),
+      name: habitName,
+      target_value: parseInt(habitTarget) || 1,
+      unit: habitUnit
+    });
+
+    toast.success('Habit created successfully!');
+    setIsModalOpen(false);
+    setHabitName('');
+    setHabitTarget('1');
+    setHabitUnit('times');
+  };
 
   const getDaysArray = function (numDays = 15) {
     const daysArr = [];
@@ -85,7 +111,7 @@ export default function HabitsPage() {
             </button>
           </div>
           <button
-            onClick={() => toast.info('New habit creation opening...')}
+            onClick={() => setIsModalOpen(true)}
             className="bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
           >
             <Plus className="w-4 h-4" /> New Habit
@@ -242,6 +268,76 @@ export default function HabitsPage() {
           </div>
         </div>
       </div>
+
+      {/* New Habit Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-background-dark/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-surface-dark border border-surface-border rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between p-6 border-b border-surface-border">
+              <h2 className="text-xl font-bold text-foreground font-display">Create New Habit</h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateHabit} className="p-6 flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-text-secondary">Habit Name</label>
+                <input
+                  type="text"
+                  value={habitName}
+                  onChange={(e) => setHabitName(e.target.value)}
+                  placeholder="e.g. Read 10 pages, Drink Water..."
+                  className="bg-background-dark border border-surface-border rounded-lg px-4 py-2.5 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-surface-border"
+                  autoFocus
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-sm font-medium text-text-secondary">Daily Target</label>
+                  <input
+                    type="number"
+                    value={habitTarget}
+                    onChange={(e) => setHabitTarget(e.target.value)}
+                    min="1"
+                    className="bg-background-dark border border-surface-border rounded-lg px-4 py-2.5 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-sm font-medium text-text-secondary">Unit</label>
+                  <input
+                    type="text"
+                    value={habitUnit}
+                    onChange={(e) => setHabitUnit(e.target.value)}
+                    placeholder="e.g. times, pages, mins"
+                    className="bg-background-dark border border-surface-border rounded-lg px-4 py-2.5 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-surface-border"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 justify-end mt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-text-secondary hover:text-foreground hover:bg-surface-border transition-all duration-200 active:scale-95"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-primary text-background-dark px-6 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 shadow-lg shadow-primary/20 flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" /> Create
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

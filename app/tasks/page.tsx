@@ -1,12 +1,49 @@
-"use client";
+'use client';
 
-import { ChevronRight, Filter, Search, Plus, MoreHorizontal, Clock, PlayCircle, Check, Zap, RotateCcw, Pause, Square, ExternalLink, FileText, Code, Database, Link as LinkIcon, Image as ImageIcon } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronRight, Filter, Search, Plus, MoreHorizontal, Clock, PlayCircle, Check, Zap, RotateCcw, Pause, Square, ExternalLink, FileText, Code, Database, Link as LinkIcon, Image as ImageIcon, X } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
 import { linkVaultItemsToTask } from '@/lib/api';
 import { toast } from 'sonner';
 
 export default function TasksPage() {
-  const { tasks, vaultItems } = useStore();
+  const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
+  const [taskTitle, setTaskTitle] = useState('');
+  const [taskCategory, setTaskCategory] = useState('Work');
+  const [taskPriority, setTaskPriority] = useState<'low' | 'medium' | 'high' | 'critical'>('medium');
+  const [taskDueDate, setTaskDueDate] = useState('');
+
+  const { tasks, vaultItems, addTask } = useStore();
+
+  const handleCreateTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!taskTitle) {
+      toast.error('Please enter a task title');
+      return;
+    }
+
+    try {
+      await addTask({
+        id: crypto.randomUUID(),
+        title: taskTitle,
+        category: taskCategory,
+        status: 'todo',
+        priority: taskPriority,
+        due_date: taskDueDate || new Date().toISOString().split('T')[0],
+        progress_percentage: 0,
+        linked_vault_ids: ''
+      });
+
+      toast.success('Task created successfully!');
+      setIsNewTaskModalOpen(false);
+      setTaskTitle('');
+      setTaskCategory('Work');
+      setTaskPriority('medium');
+      setTaskDueDate('');
+    } catch (error) {
+      toast.error('Failed to create task');
+    }
+  };
 
   const todoTasks = tasks.filter(t => t.status === 'todo');
   const inProgressTasks = tasks.filter(t => t.status === 'in_progress');
@@ -64,7 +101,7 @@ export default function TasksPage() {
               <Search className="w-5 h-5" />
             </button>
             <button
-              onClick={() => toast.success('Creating a new task sprint', { icon: '⚡' })}
+              onClick={() => setIsNewTaskModalOpen(true)}
               className="bg-accent-orange hover:bg-opacity-90 text-foreground px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 active:scale-95"
             >
               <Plus className="w-5 h-5" /> New Task
@@ -253,6 +290,92 @@ export default function TasksPage() {
           )}
         </div>
       </div>
+
+      {isNewTaskModalOpen && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-surface border border-surface-border rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between p-4 border-b border-surface-border">
+              <h2 className="text-lg font-bold text-foreground font-display">New Task</h2>
+              <button
+                onClick={() => setIsNewTaskModalOpen(false)}
+                className="text-text-secondary hover:text-foreground transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateTask} className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1">Task Title</label>
+                <input
+                  type="text"
+                  value={taskTitle}
+                  onChange={(e) => setTaskTitle(e.target.value)}
+                  placeholder="e.g. Design new landing page"
+                  className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent-orange transition-colors"
+                  autoFocus
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">Category</label>
+                  <select
+                    value={taskCategory}
+                    onChange={(e) => setTaskCategory(e.target.value)}
+                    className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent-orange transition-colors"
+                  >
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Learning">Learning</option>
+                    <option value="Health">Health</option>
+                    <option value="Finance">Finance</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">Priority</label>
+                  <select
+                    value={taskPriority}
+                    onChange={(e) => setTaskPriority(e.target.value as any)}
+                    className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent-orange transition-colors"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1">Due Date</label>
+                <input
+                  type="date"
+                  value={taskDueDate}
+                  onChange={(e) => setTaskDueDate(e.target.value)}
+                  className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent-orange transition-colors"
+                />
+              </div>
+
+              <div className="pt-2 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsNewTaskModalOpen(false)}
+                  className="px-4 py-2 text-text-secondary hover:text-foreground font-medium transition-colors active:scale-95"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-accent-orange hover:bg-opacity-90 text-foreground font-medium rounded-lg transition-all active:scale-95"
+                >
+                  Create Task
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

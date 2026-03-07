@@ -71,6 +71,9 @@ export const updateTask = (id: string, data: Partial<Task>) =>
 export const getHabitsMaster = () =>
     gas<{ rows: HabitMaster[] }>({ action: 'read', sheet: 'Habits_Master' });
 
+export const addHabitMaster = (data: Partial<HabitMaster>) =>
+    gas({ action: 'write', sheet: 'Habits_Master', data });
+
 export const getHabitsLog = (date?: string) =>
     gas<{ rows: HabitLog[] }>({ action: 'read', sheet: 'Habits_Log', filter: date ? { date } : {} });
 

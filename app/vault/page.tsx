@@ -1,12 +1,47 @@
-"use client";
+'use client';
 
-import { Search, Filter, Plus, Folder, FileText, Image as ImageIcon, Link as LinkIcon, MoreVertical, Star, Clock, Hash, Database, ChevronRight, LayoutGrid, List } from 'lucide-react';
+import { useState } from 'react';
+import { Search, Filter, Plus, Folder, FileText, Image as ImageIcon, Link as LinkIcon, MoreVertical, Star, Clock, Hash, Database, ChevronRight, LayoutGrid, List, X } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
-import { VaultItem } from '@/types';
+import { VaultItem, VaultItemType } from '@/types';
 import { toast } from 'sonner';
 
 export default function VaultPage() {
-  const { vaultItems } = useStore();
+  const { vaultItems, addVaultItem } = useStore();
+
+  const [isNewVaultModalOpen, setIsNewVaultModalOpen] = useState(false);
+  const [vaultTitle, setVaultTitle] = useState('');
+  const [vaultType, setVaultType] = useState<VaultItemType>('note');
+  const [vaultContent, setVaultContent] = useState('');
+  const [vaultTags, setVaultTags] = useState('');
+
+  const handleCreateVaultItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!vaultTitle || !vaultContent) {
+      toast.error('Please enter a title and content/URL');
+      return;
+    }
+
+    try {
+      await addVaultItem({
+        id: crypto.randomUUID(),
+        type: vaultType,
+        title: vaultTitle,
+        content: vaultContent,
+        tags: vaultTags,
+        created_at: new Date().toISOString()
+      });
+
+      toast.success('Added to Vault!');
+      setIsNewVaultModalOpen(false);
+      setVaultTitle('');
+      setVaultType('note');
+      setVaultContent('');
+      setVaultTags('');
+    } catch (error) {
+      toast.error('Failed to add to vault');
+    }
+  };
 
   const parseTags = (tags: string) => (tags || '').split(',').map(t => t.trim()).filter(Boolean);
   const allTags = Array.from(new Set(vaultItems.flatMap(item => parseTags(item.tags))));
@@ -154,7 +189,7 @@ export default function VaultPage() {
             <Filter className="w-4 h-4" />
           </button>
 
-          <button onClick={() => toast.success('Creating a new vault entry')} className="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 shadow-lg shadow-primary/20">
+          <button onClick={() => setIsNewVaultModalOpen(true)} className="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 shadow-lg shadow-primary/20">
             <Plus className="w-4 h-4" />
             <span>New Entry</span>
           </button>
@@ -221,6 +256,100 @@ export default function VaultPage() {
           </div>
         </main>
       </div>
+
+      {isNewVaultModalOpen && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-surface border border-surface-border rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between p-4 border-b border-surface-border">
+              <h2 className="text-lg font-bold text-foreground font-display">New Vault Item</h2>
+              <button
+                onClick={() => setIsNewVaultModalOpen(false)}
+                className="text-text-secondary hover:text-foreground transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateVaultItem} className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1">Title</label>
+                <input
+                  type="text"
+                  value={vaultTitle}
+                  onChange={(e) => setVaultTitle(e.target.value)}
+                  placeholder="e.g. Useful React patterns"
+                  className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors"
+                  autoFocus
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">Type</label>
+                  <select
+                    value={vaultType}
+                    onChange={(e) => setVaultType(e.target.value as VaultItemType)}
+                    className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors"
+                  >
+                    <option value="note">Note</option>
+                    <option value="link">Link</option>
+                    <option value="idea">Idea</option>
+                    <option value="resource">Resource</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text-secondary mb-1">Tags</label>
+                  <input
+                    type="text"
+                    value={vaultTags}
+                    onChange={(e) => setVaultTags(e.target.value)}
+                    placeholder="react, web, tips"
+                    className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-text-secondary mb-1">
+                  Content {vaultType === 'link' || vaultType === 'resource' ? 'or URL' : ''}
+                </label>
+                {vaultType === 'note' || vaultType === 'idea' ? (
+                  <textarea
+                    value={vaultContent}
+                    onChange={(e) => setVaultContent(e.target.value)}
+                    className="w-full h-32 bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors resize-none"
+                    placeholder="Markdown content..."
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={vaultContent}
+                    onChange={(e) => setVaultContent(e.target.value)}
+                    className="w-full bg-surface-dark border border-surface-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-primary transition-colors"
+                    placeholder="https://..."
+                  />
+                )}
+              </div>
+
+              <div className="pt-2 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsNewVaultModalOpen(false)}
+                  className="px-4 py-2 text-text-secondary hover:text-foreground font-medium transition-colors active:scale-95"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary hover:bg-opacity-90 text-background-dark font-medium rounded-lg transition-all active:scale-95 shadow-lg shadow-primary/20"
+                >
+                  Add to Vault
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

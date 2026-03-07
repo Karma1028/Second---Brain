@@ -11,7 +11,7 @@ import {
     LifeMetric,
     FinanceEntry,
 } from '@/types';
-import { fetchAllData, addTask as gasAddTask, updateTask as gasUpdateTask } from '@/lib/gasApi';
+import { fetchAllData, addTask as gasAddTask, updateTask as gasUpdateTask, addHabitMaster as gasAddHabitMaster } from '@/lib/gasApi';
 
 interface AppState {
     // Data from GAS
@@ -36,6 +36,7 @@ interface AppState {
     addJournalEntry: (entry: JournalEntry) => void;
     updateJournalMood: (id: string, mood: JournalEntry['mood']) => void;
     addVaultItem: (item: VaultItem) => void;
+    addHabit: (habit: HabitMaster) => Promise<void>;
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -69,6 +70,15 @@ export const useStore = create<AppState>((set, get) => ({
         } catch {
             // Rollback on failure
             set((state) => ({ tasks: state.tasks.filter((t) => t.id !== task.id) }));
+        }
+    },
+
+    addHabit: async (habit: HabitMaster) => {
+        set((state) => ({ habits: [...state.habits, habit] }));
+        try {
+            await gasAddHabitMaster(habit);
+        } catch {
+            set((state) => ({ habits: state.habits.filter((h) => h.id !== habit.id) }));
         }
     },
 
