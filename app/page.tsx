@@ -1,17 +1,44 @@
+"use client";
+
 import { Sun, ListTodo, MoreHorizontal, Circle, CheckCircle2, HeartPulse, TrendingUp, BookOpen, Droplets, Link as LinkIcon, FileText, Image as ImageIcon, Plus, Database, Sparkles } from 'lucide-react';
+import { useStore } from '@/hooks/useStore';
+import { TaskItem, VaultItem, AIInsight, LifeMetric } from '@/types';
+
+// Helper to render the right icon for vault items
+const getVaultIcon = (type: VaultItem['type']) => {
+  switch (type) {
+    case 'note': return <FileText className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />;
+    case 'link': return <LinkIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />;
+    case 'idea':
+    case 'resource': return <ImageIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />;
+    default: return <FileText className="w-4 h-4" />;
+  }
+};
 
 export default function Dashboard() {
+  const {
+    tasks,
+    vaultItems,
+    aiInsights,
+    lifeMetrics,
+    isLoading
+  } = useStore();
+
+  const currentTasks = tasks.filter(t => t.status !== 'done').slice(0, 3);
+  const doneTasks = tasks.filter(t => t.status === 'done').slice(0, 1);
+  const latestMetrics = lifeMetrics.length > 0 ? lifeMetrics[lifeMetrics.length - 1] : null;
+
   return (
     <div className="flex-1 overflow-y-auto flex flex-col">
       <header className="px-8 py-8 flex justify-between items-end shrink-0">
         <div>
           <h1 className="text-foreground text-3xl font-bold tracking-tight font-display">Good Morning, Architect.</h1>
-          <p className="text-text-secondary mt-1 text-sm">System operational. 3 critical tasks pending.</p>
+          <p className="text-text-secondary mt-1 text-sm">System operational. {currentTasks.length} critical tasks pending.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="px-3 py-1 bg-surface-dark border border-surface-border rounded-full text-xs text-text-secondary flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-            Online
+            <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`}></div>
+            {isLoading ? 'Syncing...' : 'Online'}
           </div>
           <div className="text-right">
             <p className="text-foreground text-sm font-medium">08:42 AM</p>
@@ -31,11 +58,11 @@ export default function Dashboard() {
                 <span>Daily briefing</span>
               </div>
               <h2 className="text-foreground text-2xl font-bold leading-tight font-display">
-                Your sleep score is <span className="text-primary">85</span>. Market trends are stable.
+                Your sleep score is <span className="text-primary">{latestMetrics?.sleep_score || '--'}</span>. Market trends are stable.
               </h2>
               <p className="text-text-secondary text-sm leading-relaxed">
-                You have a meeting with the design team at 10:00 AM. 
-                Your habit streak for &quot;Deep Work&quot; is at 4 days. Ready to synchronize?
+                You have {currentTasks.length > 0 ? currentTasks[0].title : 'no immediate tasks'}.
+                Ready to synchronize?
               </p>
             </div>
             <button className="flex-shrink-0 flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-primary text-background-dark hover:bg-foreground hover:text-background-dark transition-colors text-sm font-bold">
@@ -61,45 +88,42 @@ export default function Dashboard() {
                 </button>
               </div>
               <div className="flex flex-col gap-3">
-                {/* Task Item 1 */}
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer">
-                  <div className="flex-shrink-0 text-text-secondary group-hover:text-primary transition-colors">
-                    <Circle className="w-5 h-5" />
+                {currentTasks.map(task => (
+                  <div key={task.id} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer">
+                    <div className="flex-shrink-0 text-text-secondary group-hover:text-primary transition-colors">
+                      <Circle className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-foreground text-sm font-medium">{task.title}</p>
+                      <p className="text-text-secondary text-xs">{task.category} • {task.priority} Priority</p>
+                    </div>
+                    {task.priority === 'critical' && (
+                      <div className="px-2 py-1 rounded text-xs bg-red-500/10 text-red-400 font-medium capitalize">
+                        {task.priority}
+                      </div>
+                    )}
+                    {task.status === 'in_progress' && (
+                      <div className="px-2 py-1 rounded text-xs bg-surface-border text-text-secondary font-medium">
+                        In Progress
+                      </div>
+                    )}
                   </div>
-                  <div className="flex-1">
-                    <p className="text-foreground text-sm font-medium">Review Q4 Product Strategy</p>
-                    <p className="text-text-secondary text-xs">Project Alpha • High Priority</p>
+                ))}
+
+                {doneTasks.map(task => (
+                  <div key={task.id} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer opacity-60">
+                    <div className="flex-shrink-0 text-primary">
+                      <CheckCircle2 className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-text-secondary text-sm font-medium line-through">{task.title}</p>
+                      <p className="text-text-secondary text-xs">{task.category} • {task.priority}</p>
+                    </div>
+                    <div className="px-2 py-1 rounded text-xs bg-green-500/10 text-green-400 font-medium">
+                      Done
+                    </div>
                   </div>
-                  <div className="px-2 py-1 rounded text-xs bg-red-500/10 text-red-400 font-medium">
-                    Urgent
-                  </div>
-                </div>
-                {/* Task Item 2 */}
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer">
-                  <div className="flex-shrink-0 text-text-secondary group-hover:text-primary transition-colors">
-                    <Circle className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-foreground text-sm font-medium">Design System Audit</p>
-                    <p className="text-text-secondary text-xs">UX Team • Medium Priority</p>
-                  </div>
-                  <div className="px-2 py-1 rounded text-xs bg-surface-border text-text-secondary font-medium">
-                    In Progress
-                  </div>
-                </div>
-                {/* Task Item 3 */}
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer opacity-60">
-                  <div className="flex-shrink-0 text-primary">
-                    <CheckCircle2 className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-text-secondary text-sm font-medium line-through">Morning Workout</p>
-                    <p className="text-text-secondary text-xs">Health • Routine</p>
-                  </div>
-                  <div className="px-2 py-1 rounded text-xs bg-green-500/10 text-green-400 font-medium">
-                    Done
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -118,14 +142,14 @@ export default function Dashboard() {
               <div className="flex flex-col gap-1">
                 <p className="text-text-secondary text-sm font-medium">Sleep Quality vs Mood</p>
                 <div className="flex items-baseline gap-2">
-                  <p className="text-foreground text-3xl font-bold font-display">Optimal</p>
+                  <p className="text-foreground text-3xl font-bold font-display">{latestMetrics?.sleep_score || '--'}</p>
                   <p className="text-green-500 text-sm font-medium flex items-center gap-1">
                     <TrendingUp className="w-4 h-4" />
                     +5%
                   </p>
                 </div>
               </div>
-              {/* Chart Area */}
+              {/* Chart Area Minimal Mockup */}
               <div className="relative h-40 w-full mt-2">
                 <svg className="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 50">
                   <defs>
@@ -144,29 +168,29 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Quick Stats / Habits Grid */}
+            {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-xl border border-surface-border bg-surface-dark p-4 flex flex-col justify-between h-32 hover:border-primary/30 transition-colors">
                 <div className="flex justify-between items-start">
                   <BookOpen className="w-5 h-5 text-text-secondary" />
-                  <span className="text-xs font-mono text-text-secondary">READING</span>
+                  <span className="text-xs font-mono text-text-secondary">FOCUS</span>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-foreground font-display">12<span className="text-sm text-text-secondary font-normal ml-1">pgs</span></p>
+                  <p className="text-2xl font-bold text-foreground font-display">{latestMetrics?.focus_score || '--'}<span className="text-sm text-text-secondary font-normal ml-1">pts</span></p>
                   <div className="w-full bg-surface-border h-1 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-blue-400 h-full rounded-full" style={{ width: '45%' }}></div>
+                    <div className="bg-blue-400 h-full rounded-full" style={{ width: `${latestMetrics?.focus_score || 0}%` }}></div>
                   </div>
                 </div>
               </div>
               <div className="rounded-xl border border-surface-border bg-surface-dark p-4 flex flex-col justify-between h-32 hover:border-primary/30 transition-colors">
                 <div className="flex justify-between items-start">
                   <Droplets className="w-5 h-5 text-text-secondary" />
-                  <span className="text-xs font-mono text-text-secondary">HYDRATION</span>
+                  <span className="text-xs font-mono text-text-secondary">CAFFEINE</span>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-foreground font-display">1.2<span className="text-sm text-text-secondary font-normal ml-1">L</span></p>
+                  <p className="text-2xl font-bold text-foreground font-display">{latestMetrics?.caffeine_mg || '--'}<span className="text-sm text-text-secondary font-normal ml-1">mg</span></p>
                   <div className="w-full bg-surface-border h-1 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-primary h-full rounded-full" style={{ width: '60%' }}></div>
+                    <div className="bg-primary h-full rounded-full" style={{ width: `${Math.min(((latestMetrics?.caffeine_mg || 0) / 400) * 100, 100)}%` }}></div>
                   </div>
                 </div>
               </div>
@@ -185,27 +209,15 @@ export default function Dashboard() {
               <a className="text-sm text-primary hover:text-foreground transition-colors" href="#">View All</a>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
-                <div className="flex items-center gap-2 mb-2">
-                  <LinkIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
-                  <span className="text-xs text-text-secondary uppercase">Web Clip</span>
+              {vaultItems.slice(0, 3).map(item => (
+                <div key={item.id} className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
+                  <div className="flex items-center gap-2 mb-2">
+                    {getVaultIcon(item.type)}
+                    <span className="text-xs text-text-secondary uppercase">{item.type}</span>
+                  </div>
+                  <p className="text-foreground text-sm font-medium line-clamp-2">{item.title}</p>
                 </div>
-                <p className="text-foreground text-sm font-medium line-clamp-2">Understanding Large Language Models: A Guide for Developers</p>
-              </div>
-              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
-                <div className="flex items-center gap-2 mb-2">
-                  <FileText className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
-                  <span className="text-xs text-text-secondary uppercase">Note</span>
-                </div>
-                <p className="text-foreground text-sm font-medium line-clamp-2">Ideas for the Q4 marketing campaign sprint</p>
-              </div>
-              <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
-                <div className="flex items-center gap-2 mb-2">
-                  <ImageIcon className="w-4 h-4 text-text-secondary group-hover:text-primary transition-colors" />
-                  <span className="text-xs text-text-secondary uppercase">Image</span>
-                </div>
-                <p className="text-foreground text-sm font-medium line-clamp-2">Moodboard reference: Cyberpunk architecture</p>
-              </div>
+              ))}
               <div className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all flex items-center justify-center">
                 <div className="text-text-secondary group-hover:text-primary flex flex-col items-center gap-1 transition-colors">
                   <Plus className="w-6 h-6" />
@@ -224,40 +236,33 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <h3 className="text-foreground font-bold text-lg font-display">AI Anomaly Detection</h3>
-                  <p className="text-text-secondary text-xs">Based on last 24h biometrics</p>
+                  <p className="text-text-secondary text-xs">Based on latest intel core analysis</p>
                 </div>
               </div>
               <button className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">View All</button>
             </div>
             <div className="flex flex-col gap-3">
-              <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
-                <div className="mt-1">
-                  <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_#f59e0b]"></div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <h4 className="text-foreground text-sm font-medium group-hover:text-primary transition-colors">Caffeine Threshold Exceeded</h4>
-                    <span className="text-[10px] text-text-secondary">2h ago</span>
+              {aiInsights.slice(0, 2).map((insight, idx) => (
+                <div key={insight.id} className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
+                  <div className="mt-1">
+                    <div className={`w-2 h-2 rounded-full ${insight.severity === 'action' ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : insight.severity === 'warning' ? 'bg-amber-500 shadow-[0_0_8px_#f59e0b]' : 'bg-secondary shadow-[0_0_8px_#8b5cf6]'}`}></div>
                   </div>
-                  <p className="text-text-secondary text-xs leading-relaxed">
-                    You've consumed 120mg of caffeine after 2 PM. Based on your historical data (R²=0.82), this reduces your deep sleep duration by approximately 45 minutes.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
-                <div className="mt-1">
-                  <div className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#8b5cf6]"></div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-center mb-1">
-                    <h4 className="text-foreground text-sm font-medium group-hover:text-secondary transition-colors">Peak Focus Window Incoming</h4>
-                    <span className="text-[10px] text-text-secondary">Now</span>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center mb-1">
+                      <h4 className="text-foreground text-sm font-medium group-hover:text-primary transition-colors">{insight.title}</h4>
+                      <span className="text-[10px] text-text-secondary">{insight.timestamp}</span>
+                    </div>
+                    <p className="text-text-secondary text-xs leading-relaxed">
+                      {insight.description}
+                    </p>
                   </div>
-                  <p className="text-text-secondary text-xs leading-relaxed">
-                    Your circadian rhythm suggests your highest cognitive output window is between 10:00 AM and 11:30 AM. Suggested task: "Q3 Strategy Planning".
-                  </p>
                 </div>
-              </div>
+              ))}
+              {aiInsights.length === 0 && (
+                <div className="text-center p-4 text-text-secondary text-sm">
+                  No critical insights detected currently.
+                </div>
+              )}
             </div>
           </div>
         </div>
