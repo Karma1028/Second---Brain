@@ -3,6 +3,7 @@
 import { ChevronRight, Filter, Search, Plus, MoreHorizontal, Clock, PlayCircle, Check, Zap, RotateCcw, Pause, Square, ExternalLink, FileText, Code, Database, Link as LinkIcon, Image as ImageIcon } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
 import { linkVaultItemsToTask } from '@/lib/api';
+import { toast } from 'sonner';
 
 export default function TasksPage() {
   const { tasks, vaultItems } = useStore();
@@ -50,13 +51,22 @@ export default function TasksPage() {
             <h1 className="text-2xl font-bold text-foreground tracking-tight font-display">Active Sprints</h1>
           </div>
           <div className="flex gap-3">
-            <button className="p-2 rounded-lg hover:bg-surface-lighter text-text-secondary hover:text-foreground transition-colors">
+            <button
+              onClick={() => toast('Filter options coming soon', { icon: '🔍' })}
+              className="p-2 rounded-lg hover:bg-surface-lighter text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95"
+            >
               <Filter className="w-5 h-5" />
             </button>
-            <button className="p-2 rounded-lg hover:bg-surface-lighter text-text-secondary hover:text-foreground transition-colors">
+            <button
+              onClick={() => toast('Search functionality active', { icon: '🔍' })}
+              className="p-2 rounded-lg hover:bg-surface-lighter text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95"
+            >
               <Search className="w-5 h-5" />
             </button>
-            <button className="bg-accent-orange hover:bg-opacity-90 text-foreground px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+            <button
+              onClick={() => toast.success('Creating a new task sprint', { icon: '⚡' })}
+              className="bg-accent-orange hover:bg-opacity-90 text-foreground px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 active:scale-95"
+            >
               <Plus className="w-5 h-5" /> New Task
             </button>
           </div>
@@ -71,7 +81,7 @@ export default function TasksPage() {
                   TO DO
                   <span className="text-xs bg-surface-border px-2 py-0.5 rounded text-text-secondary">{todoTasks.length}</span>
                 </h3>
-                <button className="text-text-secondary hover:text-foreground"><MoreHorizontal className="w-5 h-5" /></button>
+                <button onClick={() => toast('Column options opened')} className="text-text-secondary hover:text-foreground transition-all duration-200 active:scale-90"><MoreHorizontal className="w-5 h-5" /></button>
               </div>
               <div className="flex flex-col gap-3">
                 {todoTasks.map(task => (
@@ -99,7 +109,7 @@ export default function TasksPage() {
                   IN PROGRESS
                   <span className="text-xs bg-surface-border px-2 py-0.5 rounded text-text-secondary">{inProgressTasks.length}</span>
                 </h3>
-                <button className="text-text-secondary hover:text-foreground"><MoreHorizontal className="w-5 h-5" /></button>
+                <button onClick={() => toast('Column options opened')} className="text-text-secondary hover:text-foreground transition-all duration-200 active:scale-90"><MoreHorizontal className="w-5 h-5" /></button>
               </div>
               <div className="flex flex-col gap-3">
                 {inProgressTasks.map(task => (
@@ -132,7 +142,7 @@ export default function TasksPage() {
                   DONE
                   <span className="text-xs bg-surface-border px-2 py-0.5 rounded text-text-secondary">{doneTasks.length}</span>
                 </h3>
-                <button className="text-text-secondary hover:text-foreground"><MoreHorizontal className="w-5 h-5" /></button>
+                <button onClick={() => toast('Column options opened')} className="text-text-secondary hover:text-foreground transition-all duration-200 active:scale-90"><MoreHorizontal className="w-5 h-5" /></button>
               </div>
               <div className="flex flex-col gap-3 opacity-60 hover:opacity-100 transition-opacity">
                 {doneTasks.map(task => (
@@ -178,13 +188,13 @@ export default function TasksPage() {
                   </div>
                 </div>
                 <div className="flex gap-4 mt-8">
-                  <button className="bg-surface-border hover:bg-surface-border/80 text-foreground p-3 rounded-full transition-colors">
+                  <button onClick={() => toast('Timer reset', { icon: '🔄' })} className="bg-surface-border hover:bg-surface-border/80 text-foreground p-3 rounded-full transition-all duration-200 active:scale-90">
                     <RotateCcw className="w-5 h-5" />
                   </button>
-                  <button className="bg-accent-orange hover:bg-primary-dim text-foreground p-4 rounded-full shadow-lg shadow-accent-orange/20 transition-colors transform hover:scale-105">
+                  <button onClick={() => toast('Timer paused')} className="bg-accent-orange hover:bg-primary-dim text-foreground p-4 rounded-full shadow-lg shadow-accent-orange/20 transition-all duration-200 hover:scale-105 active:scale-95">
                     <Pause className="w-6 h-6" />
                   </button>
-                  <button className="bg-surface-border hover:bg-surface-border/80 text-foreground p-3 rounded-full transition-colors">
+                  <button onClick={() => toast('Focus session stopped', { icon: '⏹️' })} className="bg-surface-border hover:bg-surface-border/80 text-foreground p-3 rounded-full transition-all duration-200 active:scale-90">
                     <Square className="w-5 h-5" />
                   </button>
                 </div>
@@ -204,10 +214,10 @@ export default function TasksPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3 mt-4 pt-4 border-t border-surface-border">
-                  <button className="flex-1 bg-accent-orange text-foreground text-sm font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors">
+                  <button onClick={() => toast.success('Task marked as completed! 🎉')} className="flex-1 bg-accent-orange text-foreground text-sm font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-all duration-200 active:scale-95">
                     Complete Task
                   </button>
-                  <button className="p-2 text-text-secondary hover:text-foreground bg-surface-darker rounded-lg">
+                  <button onClick={() => toast('Opening task details')} className="p-2 text-text-secondary hover:text-foreground bg-surface-darker rounded-lg transition-all duration-200 active:scale-90">
                     <ExternalLink className="w-5 h-5" />
                   </button>
                 </div>
@@ -219,7 +229,7 @@ export default function TasksPage() {
                     <Database className="w-4 h-4 text-accent-orange" />
                     Vault Context
                   </h3>
-                  <button className="text-accent-orange text-xs font-medium hover:underline">Link Note</button>
+                  <button onClick={() => toast('Link Note drawer opened')} className="text-accent-orange text-xs font-medium hover:underline transition-all duration-200 active:scale-95">Link Note</button>
                 </div>
                 <div className="flex flex-col gap-3">
                   {activeVaultItems.length > 0 ? (

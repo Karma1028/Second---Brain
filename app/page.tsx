@@ -89,13 +89,13 @@ export default function Dashboard() {
                   <ListTodo className="w-5 h-5 text-text-secondary" />
                   Agenda
                 </h3>
-                <button className="text-text-secondary hover:text-foreground transition-colors">
+                <button onClick={() => toast('Agenda options opened')} className="text-text-secondary hover:text-foreground transition-all duration-200 active:scale-90">
                   <MoreHorizontal className="w-5 h-5" />
                 </button>
               </div>
               <div className="flex flex-col gap-3">
                 {currentTasks.map(task => (
-                  <div key={task.id} onClick={() => { updateTaskProgress(task.id, 100); toast.success('Task marked as done!'); }} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer">
+                  <div key={task.id} onClick={() => { updateTaskProgress(task.id, 100); toast.success('Task marked as done!'); }} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-all duration-200 active:scale-[0.98] group cursor-pointer">
                     <div className="flex-shrink-0 text-text-secondary group-hover:text-primary transition-colors">
                       <Circle className="w-5 h-5" />
                     </div>
@@ -117,7 +117,7 @@ export default function Dashboard() {
                 ))}
 
                 {doneTasks.map(task => (
-                  <div key={task.id} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-colors group cursor-pointer opacity-60">
+                  <div key={task.id} onClick={() => toast('Task already completed')} className="flex items-center gap-3 p-3 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 transition-all duration-200 active:scale-[0.98] group cursor-pointer opacity-60">
                     <div className="flex-shrink-0 text-primary">
                       <CheckCircle2 className="w-5 h-5" />
                     </div>
@@ -212,11 +212,11 @@ export default function Dashboard() {
                 <Database className="w-5 h-5 text-text-secondary" />
                 Recent Vault Captures
               </h3>
-              <a className="text-sm text-primary hover:text-foreground transition-colors" href="#">View All</a>
+              <button onClick={() => toast('Navigating to vault...')} className="text-sm text-primary hover:text-foreground transition-all duration-200 active:scale-95">View All</button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {vaultItems.slice(0, 3).map(item => (
-                <div key={item.id} className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all">
+                <div key={item.id} onClick={() => toast('Opening vault item...')} className="p-4 rounded-lg bg-background-dark border border-surface-border hover:border-primary/50 cursor-pointer group transition-all duration-200 active:scale-95">
                   <div className="flex items-center gap-2 mb-2">
                     {getVaultIcon(item.type)}
                     <span className="text-xs text-text-secondary uppercase">{item.type}</span>

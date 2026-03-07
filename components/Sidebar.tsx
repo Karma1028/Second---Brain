@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, CheckSquare, Activity, Database, Settings, Book, Calendar } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
+import { toast } from 'sonner';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -36,18 +37,16 @@ export default function Sidebar() {
             const isActive = pathname === item.href;
             const Icon = item.icon;
             return (
-              <Link 
+              <Link
                 key={item.href}
-                href={item.href} 
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group ${
-                  isActive 
-                    ? 'bg-surface-border/50 text-foreground' 
+                href={item.href}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 active:scale-95 group ${isActive
+                    ? 'bg-surface-border/50 text-foreground'
                     : 'text-text-secondary hover:bg-surface-border/30 hover:text-foreground'
-                }`}
+                  }`}
               >
-                <Icon className={`w-5 h-5 transition-colors ${
-                  isActive ? 'text-primary' : 'group-hover:text-foreground'
-                }`} />
+                <Icon className={`w-5 h-5 transition-colors ${isActive ? 'text-primary' : 'group-hover:text-foreground'
+                  }`} />
                 <span className="text-sm font-medium">{item.name}</span>
               </Link>
             );
@@ -55,7 +54,10 @@ export default function Sidebar() {
         </nav>
       </div>
       <div className="p-4 border-t border-surface-border">
-        <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg h-10 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 hover:border-primary/50 transition-all text-sm font-bold tracking-wide">
+        <button
+          onClick={() => toast.info('Quick Capture mode activating...')}
+          className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg h-10 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 hover:border-primary/50 transition-all duration-200 active:scale-95 text-sm font-bold tracking-wide"
+        >
           <span className="text-lg">+</span>
           <span>Quick Capture</span>
         </button>

@@ -3,6 +3,7 @@
 import { Search, Filter, Plus, Folder, FileText, Image as ImageIcon, Link as LinkIcon, MoreVertical, Star, Clock, Hash, Database, ChevronRight, LayoutGrid, List } from 'lucide-react';
 import { useStore } from '@/hooks/useStore';
 import { VaultItem } from '@/types';
+import { toast } from 'sonner';
 
 export default function VaultPage() {
   const { vaultItems } = useStore();
@@ -20,7 +21,10 @@ export default function VaultPage() {
               <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
                 <FileText className="w-4 h-4" />
               </div>
-              <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+              <button
+                onClick={(e) => { e.stopPropagation(); toast('Options opened for note'); }}
+                className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-all duration-200 active:scale-90"
+              >
                 <MoreVertical className="w-4 h-4" />
               </button>
             </div>
@@ -46,7 +50,10 @@ export default function VaultPage() {
               <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
                 <LinkIcon className="w-4 h-4" />
               </div>
-              <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+              <button
+                onClick={(e) => { e.stopPropagation(); toast('Options opened for link'); }}
+                className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-all duration-200 active:scale-90"
+              >
                 <MoreVertical className="w-4 h-4" />
               </button>
             </div>
@@ -73,7 +80,10 @@ export default function VaultPage() {
         return (
           <div key={item.id} className="bg-surface-dark border border-surface-border rounded-xl p-0 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
             <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button className="p-1.5 bg-background-dark/80 backdrop-blur-sm rounded-md text-foreground hover:bg-primary hover:text-background-dark transition-colors">
+              <button
+                onClick={(e) => { e.stopPropagation(); toast('Options opened for media'); }}
+                className="p-1.5 bg-background-dark/80 backdrop-blur-sm rounded-md text-foreground hover:bg-primary hover:text-background-dark transition-all duration-200 active:scale-90"
+              >
                 <MoreVertical className="w-4 h-4" />
               </button>
             </div>
@@ -132,19 +142,19 @@ export default function VaultPage() {
           </div>
 
           <div className="flex items-center bg-surface-dark border border-surface-border rounded-lg p-1">
-            <button className="p-1.5 rounded-md bg-surface-border text-foreground shadow-sm">
+            <button onClick={() => toast('Switched to Grid View')} className="p-1.5 rounded-md bg-surface-border text-foreground shadow-sm transition-all duration-200 active:scale-95">
               <LayoutGrid className="w-4 h-4" />
             </button>
-            <button className="p-1.5 rounded-md text-text-secondary hover:text-foreground transition-colors">
+            <button onClick={() => toast('Switched to List View')} className="p-1.5 rounded-md text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95">
               <List className="w-4 h-4" />
             </button>
           </div>
 
-          <button className="p-2 rounded-lg border border-surface-border bg-surface-dark text-text-secondary hover:text-foreground hover:border-primary/30 transition-all">
+          <button onClick={() => toast('Filter vault items')} className="p-2 rounded-lg border border-surface-border bg-surface-dark text-text-secondary hover:text-foreground hover:border-primary/30 transition-all duration-200 active:scale-95">
             <Filter className="w-4 h-4" />
           </button>
 
-          <button className="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-colors shadow-lg shadow-primary/20">
+          <button onClick={() => toast.success('Creating a new vault entry')} className="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 shadow-lg shadow-primary/20">
             <Plus className="w-4 h-4" />
             <span>New Entry</span>
           </button>

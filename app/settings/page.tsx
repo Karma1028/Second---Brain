@@ -1,4 +1,5 @@
 import { Settings as SettingsIcon, User, Bell, Shield, Database, Layout, Moon, Sun, Monitor, Smartphone, Key, CreditCard, LogOut, ChevronRight, Check } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function SettingsPage() {
   return (
@@ -42,7 +43,7 @@ export default function SettingsPage() {
           </a>
         </nav>
         <div className="p-4 border-t border-surface-border">
-          <button className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-rose-400 hover:bg-rose-500/10 transition-colors text-sm font-medium">
+          <button onClick={() => toast('Signing out...', { icon: '👋' })} className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-rose-400 hover:bg-rose-500/10 transition-all duration-200 active:scale-95 text-sm font-medium">
             <LogOut className="w-4 h-4" />
             Sign Out
           </button>
@@ -67,14 +68,14 @@ export default function SettingsPage() {
               <div className="flex items-start gap-6 mb-8">
                 <div className="relative">
                   <div className="w-24 h-24 rounded-full bg-surface-border border-2 border-surface-dark overflow-hidden bg-cover bg-center" style={{ backgroundImage: 'url("https://picsum.photos/seed/avatar/200/200")' }}></div>
-                  <button className="absolute bottom-0 right-0 p-1.5 bg-primary text-background-dark rounded-full hover:bg-foreground hover:text-background-dark transition-colors shadow-lg">
+                  <button onClick={() => toast('Opening avatar settings')} className="absolute bottom-0 right-0 p-1.5 bg-primary text-background-dark rounded-full hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-90 shadow-lg">
                     <SettingsIcon className="w-4 h-4" />
                   </button>
                 </div>
                 <div className="flex-1">
                   <div className="flex gap-4 mb-4">
-                    <button className="px-4 py-2 bg-surface-border text-foreground text-sm font-medium rounded-lg hover:bg-surface-border/80 transition-colors">Change Avatar</button>
-                    <button className="px-4 py-2 text-text-secondary text-sm font-medium rounded-lg hover:bg-surface-border/50 hover:text-foreground transition-colors">Remove</button>
+                    <button onClick={() => toast('Select a new avatar image')} className="px-4 py-2 bg-surface-border text-foreground text-sm font-medium rounded-lg hover:bg-surface-border/80 transition-all duration-200 active:scale-95">Change Avatar</button>
+                    <button onClick={() => toast('Avatar removed')} className="px-4 py-2 text-text-secondary text-sm font-medium rounded-lg hover:bg-surface-border/50 hover:text-foreground transition-all duration-200 active:scale-95">Remove</button>
                   </div>
                   <p className="text-xs text-text-secondary">JPG, GIF or PNG. Max size of 800K</p>
                 </div>
@@ -104,7 +105,7 @@ export default function SettingsPage() {
             {/* Preferences Section */}
             <section className="bg-surface-dark border border-surface-border rounded-2xl p-6">
               <h3 className="text-lg font-bold text-foreground mb-6 font-display">Preferences</h3>
-              
+
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between pb-6 border-b border-surface-border/50">
                   <div>
@@ -136,9 +137,9 @@ export default function SettingsPage() {
                     <p className="text-xs text-text-secondary">Customize the look and feel of the application.</p>
                   </div>
                   <div className="flex items-center gap-2 bg-background-dark border border-surface-border rounded-lg p-1">
-                    <button className="p-2 rounded-md text-text-secondary hover:text-foreground transition-colors"><Sun className="w-4 h-4" /></button>
-                    <button className="p-2 rounded-md bg-surface-border text-primary shadow-sm"><Moon className="w-4 h-4" /></button>
-                    <button className="p-2 rounded-md text-text-secondary hover:text-foreground transition-colors"><Monitor className="w-4 h-4" /></button>
+                    <button onClick={() => toast('Light theme enabled', { icon: '☀️' })} className="p-2 rounded-md text-text-secondary hover:text-foreground transition-all duration-200 active:scale-90"><Sun className="w-4 h-4" /></button>
+                    <button onClick={() => toast('Dark theme enabled', { icon: '🌙' })} className="p-2 rounded-md bg-surface-border text-primary shadow-sm transition-all duration-200 active:scale-90"><Moon className="w-4 h-4" /></button>
+                    <button onClick={() => toast('System theme enabled', { icon: '💻' })} className="p-2 rounded-md text-text-secondary hover:text-foreground transition-all duration-200 active:scale-90"><Monitor className="w-4 h-4" /></button>
                   </div>
                 </div>
               </div>
@@ -149,19 +150,19 @@ export default function SettingsPage() {
               <div className="absolute top-0 left-0 w-1 h-full bg-rose-500"></div>
               <h3 className="text-lg font-bold text-foreground mb-2 font-display">Danger Zone</h3>
               <p className="text-sm text-text-secondary mb-6">Irreversible actions regarding your account data.</p>
-              
+
               <div className="flex items-center justify-between p-4 rounded-xl border border-rose-500/20 bg-rose-500/5">
                 <div>
                   <h4 className="text-sm font-medium text-foreground mb-1">Delete Account</h4>
                   <p className="text-xs text-text-secondary">Permanently delete your account and all associated data.</p>
                 </div>
-                <button className="px-4 py-2 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-lg text-sm font-medium hover:bg-rose-500 hover:text-foreground transition-colors">Delete Account</button>
+                <button onClick={() => toast.error('Account deletion requested')} className="px-4 py-2 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-lg text-sm font-medium hover:bg-rose-500 hover:text-foreground transition-all duration-200 active:scale-95">Delete Account</button>
               </div>
             </section>
 
             <div className="flex justify-end gap-4 mt-4">
-              <button className="px-6 py-2.5 text-sm font-medium text-text-secondary hover:text-foreground transition-colors">Cancel</button>
-              <button className="px-6 py-2.5 bg-primary text-background-dark rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-colors shadow-lg shadow-primary/20 flex items-center gap-2">
+              <button onClick={() => toast('Changes discarded')} className="px-6 py-2.5 text-sm font-medium text-text-secondary hover:text-foreground transition-all duration-200 active:scale-95">Cancel</button>
+              <button onClick={() => toast.success('Settings saved successfully')} className="px-6 py-2.5 bg-primary text-background-dark rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-all duration-200 active:scale-95 shadow-lg shadow-primary/20 flex items-center gap-2">
                 <Check className="w-4 h-4" />
                 Save Changes
               </button>
