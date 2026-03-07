@@ -1,25 +1,67 @@
+"use client";
+
 import { ChevronLeft, ChevronRight, Plus, Check, Flame, Activity, TrendingUp, Calendar as CalendarIcon, Moon } from 'lucide-react';
+import { useStore } from '@/hooks/useStore';
 
 export default function HabitsPage() {
-  const days = [
-    { day: 'S', date: '8' }, { day: 'M', date: '9' }, { day: 'T', date: '10' },
-    { day: 'W', date: '11' }, { day: 'T', date: '12' }, { day: 'F', date: '13' },
-    { day: 'S', date: '14' }, { day: 'S', date: '15' }, { day: 'M', date: '16' },
-    { day: 'T', date: '17' }, { day: 'W', date: '18' }, { day: 'T', date: '19' },
-    { day: 'F', date: '20' }, { day: 'S', date: '21' }, { day: 'S', date: '22' },
+  const { habits, habitLogs, lifeMetrics, journals } = useStore();
+
+  const getDaysArray = function (numDays = 15) {
+    const daysArr = [];
+    const today = new Date();
+    for (let i = numDays - 1; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      daysArr.push({
+        day: d.toLocaleDateString('en-US', { weekday: 'narrow' }),
+        date: d.getDate().toString(),
+        fullDate: dateStr
+      });
+    }
+    return daysArr;
+  };
+
+  const days = getDaysArray();
+
+  const displayHabits = habits.map(habit => {
+    const completions = days.map((d, index) => {
+      const log = habitLogs.find(l => l.habit_id === habit.id && l.date === d.fullDate);
+      return log && log.status === 'done' ? index : -1;
+    }).filter(idx => idx !== -1);
+
+    const doneCount = completions.length;
+    const progress = Math.round((doneCount / days.length) * 100);
+
+    return {
+      id: habit.id,
+      name: habit.name,
+      target: habit.target_value,
+      unit: habit.unit,
+      actual: days.length,
+      done: doneCount,
+      progress: progress || 0,
+      completions: completions
+    };
+  });
+
+  const moodValues = days.map(d => {
+    const journal = journals.find(j => j.date === d.fullDate);
+    if (!journal) return 0;
+    return journal.mood === 'great' ? 5 : journal.mood === 'good' ? 4 : journal.mood === 'neutral' ? 3 : journal.mood === 'bad' ? 2 : 1;
+  });
+
+  const sleepValues = days.map(d => {
+    const metric = lifeMetrics.find(m => m.date === d.fullDate);
+    return metric ? metric.sleep_hours : 0;
+  });
+
+  const displayMetrics = [
+    { name: 'Mood', type: 'rating', values: moodValues },
+    { name: 'Sleep Hours', type: 'number', values: sleepValues },
   ];
 
-  const habits = [
-    { name: 'Deep Work (2h)', actual: 15, done: 12, progress: 80, completions: [2, 10, 11, 12, 13] },
-    { name: 'Read 20 pages', actual: 15, done: 10, progress: 66, completions: [2, 3, 8, 9, 10, 14] },
-    { name: 'Workout', actual: 15, done: 8, progress: 53, completions: [2, 4, 6, 9, 11, 13] },
-    { name: 'Meditation (10m)', actual: 15, done: 14, progress: 93, completions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14] },
-  ];
-
-  const metrics = [
-    { name: 'Mood', type: 'rating', values: [4, 4, 5, 3, 4, 4, 5, 4, 3, 4, 5, 4, 4, 5, 4] },
-    { name: 'Sleep Hours', type: 'number', values: [7.5, 8, 6.5, 7, 7.5, 8, 8.5, 7, 6, 7.5, 8, 7, 7.5, 8, 7.5] },
-  ];
+  const currentMonthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-background-dark">
@@ -36,7 +78,7 @@ export default function HabitsPage() {
             <button className="p-1 hover:bg-surface-border rounded text-text-secondary hover:text-foreground transition-colors">
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm font-medium px-2 text-foreground">March 2026</span>
+            <span className="text-sm font-medium px-2 text-foreground">{currentMonthYear}</span>
             <button className="p-1 hover:bg-surface-border rounded text-text-secondary hover:text-foreground transition-colors">
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -71,7 +113,7 @@ export default function HabitsPage() {
 
           {/* Habits Rows */}
           <div className="flex flex-col">
-            {habits.map((habit, hIdx) => (
+            {displayHabits.map((habit, hIdx) => (
               <div key={hIdx} className="flex border-b border-surface-border/50 hover:bg-surface-border/10 transition-colors group">
                 <div className="w-64 shrink-0 p-4 font-medium text-foreground text-sm flex items-center">
                   {habit.name}
@@ -81,11 +123,10 @@ export default function HabitsPage() {
                     const isDone = habit.completions.includes(dIdx);
                     return (
                       <div key={dIdx} className="flex-1 flex items-center justify-center border-l border-surface-border/50 p-1 min-w-[40px]">
-                        <button className={`w-full h-8 rounded flex items-center justify-center transition-all ${
-                          isDone 
-                            ? 'bg-primary text-background-dark shadow-[0_0_10px_rgba(13,242,242,0.3)]' 
-                            : 'hover:bg-surface-border/50 text-transparent hover:text-text-secondary/50'
-                        }`}>
+                        <button className={`w-full h-8 rounded flex items-center justify-center transition-all ${isDone
+                          ? 'bg-primary text-background-dark shadow-[0_0_10px_rgba(13,242,242,0.3)]'
+                          : 'hover:bg-surface-border/50 text-transparent hover:text-text-secondary/50'
+                          }`}>
                           <Check className="w-4 h-4" />
                         </button>
                       </div>
@@ -107,7 +148,7 @@ export default function HabitsPage() {
 
           {/* Metrics Rows */}
           <div className="flex flex-col border-t-2 border-surface-border">
-            {metrics.map((metric, mIdx) => (
+            {displayMetrics.map((metric, mIdx) => (
               <div key={mIdx} className="flex border-b border-surface-border/50 bg-surface-darker/50">
                 <div className="w-64 shrink-0 p-4 font-medium text-text-secondary text-sm flex items-center gap-2">
                   {metric.name === 'Mood' ? <Activity className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -138,7 +179,7 @@ export default function HabitsPage() {
               </div>
               <div className="flex-1 flex">
                 {days.map((_, dIdx) => {
-                  const doneCount = habits.filter(h => h.completions.includes(dIdx)).length;
+                  const doneCount = displayHabits.filter(h => h.completions.includes(dIdx)).length;
                   return (
                     <div key={dIdx} className="flex-1 flex items-center justify-center border-l border-surface-border/50 min-w-[40px]">
                       <span className={`text-xs font-bold ${doneCount > 0 ? 'text-primary' : 'text-text-secondary'}`}>{doneCount}</span>
@@ -154,8 +195,8 @@ export default function HabitsPage() {
               </div>
               <div className="flex-1 flex">
                 {days.map((_, dIdx) => {
-                  const doneCount = habits.filter(h => h.completions.includes(dIdx)).length;
-                  const percentage = Math.round((doneCount / habits.length) * 100);
+                  const doneCount = displayHabits.filter(h => h.completions.includes(dIdx)).length;
+                  const percentage = displayHabits.length > 0 ? Math.round((doneCount / displayHabits.length) * 100) : 0;
                   return (
                     <div key={dIdx} className="flex-1 flex items-center justify-center border-l border-surface-border/50 min-w-[40px]">
                       <span className={`text-[10px] font-bold ${percentage === 100 ? 'text-primary' : 'text-foreground'}`}>{percentage}%</span>
