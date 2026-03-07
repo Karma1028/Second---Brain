@@ -1,26 +1,6 @@
-"use client";
-
 import { Moon, Brain, Battery, Coffee, MoreHorizontal, TrendingUp, TrendingDown, Sparkles } from 'lucide-react';
-import { useStore } from '@/hooks/useStore';
 
 export default function MetricsPage() {
-  const { lifeMetrics, aiInsights } = useStore();
-
-  const sortedMetrics = [...lifeMetrics].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  const latestMetric = sortedMetrics[0] || {
-    sleep_hours: 0,
-    focus_score: 0,
-    social_battery_pct: 0,
-    caffeine_mg: 0
-  };
-
-  const formattedSleep = `${Math.floor(latestMetric.sleep_hours)}h ${Math.round((latestMetric.sleep_hours % 1) * 60)}m`;
-
-  const biometricInsights = aiInsights
-    .filter(insight => insight.severity === 'warning' || insight.severity === 'action')
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-    .slice(0, 2);
-
   return (
     <div className="flex-1 flex flex-col relative">
       {/* Background Glow Effect */}
@@ -53,9 +33,9 @@ export default function MetricsPage() {
               </span>
             </div>
             <h3 className="text-text-secondary text-sm font-medium mb-1">Avg Sleep</h3>
-            <p className="text-2xl font-bold text-foreground tracking-tight font-display">{formattedSleep}</p>
+            <p className="text-2xl font-bold text-foreground tracking-tight font-display">7h 12m</p>
             <div className="absolute bottom-0 left-0 w-full h-1 bg-indigo-500/20">
-              <div className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] transition-all duration-1000" style={{ width: `${Math.min((latestMetric.sleep_hours / 10) * 100, 100)}%` }}></div>
+              <div className="h-full bg-indigo-500 w-[75%] shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
             </div>
           </div>
 
@@ -69,9 +49,9 @@ export default function MetricsPage() {
               </span>
             </div>
             <h3 className="text-text-secondary text-sm font-medium mb-1">Focus Score</h3>
-            <p className="text-2xl font-bold text-foreground tracking-tight font-display">{latestMetric.focus_score}<span className="text-text-secondary text-lg font-normal">/100</span></p>
+            <p className="text-2xl font-bold text-foreground tracking-tight font-display">84<span className="text-text-secondary text-lg font-normal">/100</span></p>
             <div className="absolute bottom-0 left-0 w-full h-1 bg-primary/20">
-              <div className="h-full bg-primary shadow-[0_0_10px_rgba(13,242,242,0.5)] transition-all duration-1000" style={{ width: `${latestMetric.focus_score}%` }}></div>
+              <div className="h-full bg-primary w-[84%] shadow-[0_0_10px_rgba(13,242,242,0.5)]"></div>
             </div>
           </div>
 
@@ -85,9 +65,9 @@ export default function MetricsPage() {
               </span>
             </div>
             <h3 className="text-text-secondary text-sm font-medium mb-1">Social Battery</h3>
-            <p className="text-2xl font-bold text-foreground tracking-tight font-display">{latestMetric.social_battery_pct}%</p>
+            <p className="text-2xl font-bold text-foreground tracking-tight font-display">45%</p>
             <div className="absolute bottom-0 left-0 w-full h-1 bg-rose-500/20">
-              <div className="h-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)] transition-all duration-1000" style={{ width: `${latestMetric.social_battery_pct}%` }}></div>
+              <div className="h-full bg-rose-500 w-[45%] shadow-[0_0_10px_rgba(244,63,94,0.5)]"></div>
             </div>
           </div>
 
@@ -101,9 +81,9 @@ export default function MetricsPage() {
               </span>
             </div>
             <h3 className="text-text-secondary text-sm font-medium mb-1">Caffeine</h3>
-            <p className="text-2xl font-bold text-foreground tracking-tight font-display">{latestMetric.caffeine_mg}<span className="text-text-secondary text-lg font-normal">mg</span></p>
+            <p className="text-2xl font-bold text-foreground tracking-tight font-display">120<span className="text-text-secondary text-lg font-normal">mg</span></p>
             <div className="absolute bottom-0 left-0 w-full h-1 bg-amber-500/20">
-              <div className="h-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all duration-1000" style={{ width: `${Math.min((latestMetric.caffeine_mg / 400) * 100, 100)}%` }}></div>
+              <div className="h-full bg-amber-500 w-[30%] shadow-[0_0_10px_rgba(245,158,11,0.5)]"></div>
             </div>
           </div>
 
@@ -170,7 +150,7 @@ export default function MetricsPage() {
                 <div className="absolute w-full h-px bg-surface-border bottom-[25%]"></div>
                 <div className="absolute w-full h-px bg-surface-border bottom-[50%]"></div>
                 <div className="absolute w-full h-px bg-surface-border bottom-[75%]"></div>
-
+                
                 {/* Data Points */}
                 <div className="absolute left-[10%] bottom-[20%] w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#8b5cf6]"></div>
                 <div className="absolute left-[20%] bottom-[35%] w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#8b5cf6]"></div>
@@ -182,10 +162,10 @@ export default function MetricsPage() {
                 <div className="absolute left-[75%] bottom-[75%] w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#8b5cf6]"></div>
                 <div className="absolute left-[85%] bottom-[80%] w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#8b5cf6]"></div>
                 <div className="absolute left-[92%] bottom-[70%] w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#0df2f2] ring-2 ring-white"></div>
-
+                
                 {/* Trend Line */}
                 <div className="absolute bottom-[20%] left-[10%] w-[85%] h-0.5 bg-gradient-to-r from-white/10 via-primary/50 to-primary origin-bottom-left" style={{ transform: 'rotate(-35deg)' }}></div>
-
+                
                 {/* Labels */}
                 <div className="absolute -bottom-6 left-0 text-[10px] text-text-secondary">4h</div>
                 <div className="absolute -bottom-6 left-1/4 text-[10px] text-text-secondary">6h</div>
@@ -253,34 +233,34 @@ export default function MetricsPage() {
               <button className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">View All Analysis</button>
             </div>
             <div className="flex flex-col gap-3">
-              {biometricInsights.length > 0 ? (
-                biometricInsights.map((insight) => (
-                  <div key={insight.id} className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
-                    <div className="mt-1">
-                      <div className={`w-2 h-2 rounded-full shadow-[0_0_8px] ${insight.severity === 'action' ? 'bg-rose-500 shadow-rose-500' :
-                        insight.severity === 'warning' ? 'bg-amber-500 shadow-amber-500' :
-                          'bg-secondary shadow-secondary'
-                        }`}></div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center mb-1">
-                        <h4 className={`text-foreground text-sm font-medium transition-colors ${insight.severity === 'action' ? 'group-hover:text-rose-400' :
-                          insight.severity === 'warning' ? 'group-hover:text-amber-400' :
-                            'group-hover:text-secondary'
-                          }`}>{insight.title}</h4>
-                        <span className="text-[10px] text-text-secondary">{new Date(insight.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                      </div>
-                      <p className="text-text-secondary text-xs leading-relaxed">
-                        {insight.description}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-text-secondary text-sm py-4 text-center border border-dashed border-surface-border rounded-xl">
-                  No biometric anomalies detected today.
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
+                <div className="mt-1">
+                  <div className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_#f59e0b]"></div>
                 </div>
-              )}
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="text-foreground text-sm font-medium group-hover:text-primary transition-colors">Caffeine Threshold Exceeded</h4>
+                    <span className="text-[10px] text-text-secondary">2h ago</span>
+                  </div>
+                  <p className="text-text-secondary text-xs leading-relaxed">
+                    You&apos;ve consumed 120mg of caffeine after 2 PM. Based on your historical data (R²=0.82), this reduces your deep sleep duration by approximately 45 minutes.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-darker border border-surface-border hover:border-primary/20 transition-all group">
+                <div className="mt-1">
+                  <div className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#8b5cf6]"></div>
+                </div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <h4 className="text-foreground text-sm font-medium group-hover:text-secondary transition-colors">Peak Focus Window Incoming</h4>
+                    <span className="text-[10px] text-text-secondary">Now</span>
+                  </div>
+                  <p className="text-text-secondary text-xs leading-relaxed">
+                    Your circadian rhythm suggests your highest cognitive output window is between 10:00 AM and 11:30 AM. Suggested task: &quot;Q3 Strategy Planning&quot;.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

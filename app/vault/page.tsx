@@ -1,108 +1,6 @@
-"use client";
-
 import { Search, Filter, Plus, Folder, FileText, Image as ImageIcon, Link as LinkIcon, MoreVertical, Star, Clock, Hash, Database, ChevronRight, LayoutGrid, List } from 'lucide-react';
-import { useStore } from '@/hooks/useStore';
-import { VaultItem } from '@/types';
 
 export default function VaultPage() {
-  const { vaultItems } = useStore();
-
-  const parseTags = (tags: string) => (tags || '').split(',').map(t => t.trim()).filter(Boolean);
-  const allTags = Array.from(new Set(vaultItems.flatMap(item => parseTags(item.tags))));
-
-  const renderVaultItem = (item: VaultItem) => {
-    switch (item.type) {
-      case 'note':
-        return (
-          <div key={item.id} className="bg-surface-dark border border-surface-border rounded-xl p-5 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="flex justify-between items-start mb-3">
-              <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
-                <FileText className="w-4 h-4" />
-              </div>
-              <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                <MoreVertical className="w-4 h-4" />
-              </button>
-            </div>
-            <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">{item.title}</h3>
-            <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
-              {item.content}
-            </p>
-            <div className="flex items-center justify-between mt-auto pt-4 border-t border-surface-border/50">
-              <div className="flex gap-2 flex-wrap">
-                {parseTags(item.tags).map(tag => (
-                  <span key={tag} className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#{tag}</span>
-                ))}
-              </div>
-              <span className="text-[10px] text-text-secondary">{item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</span>
-            </div>
-          </div>
-        );
-      case 'link':
-        return (
-          <div key={item.id} className="bg-surface-dark border border-surface-border rounded-xl p-5 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="flex justify-between items-start mb-3">
-              <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
-                <LinkIcon className="w-4 h-4" />
-              </div>
-              <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                <MoreVertical className="w-4 h-4" />
-              </button>
-            </div>
-            <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">{item.title}</h3>
-            <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
-              {item.content}
-            </p>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-4 h-4 rounded-full bg-surface-border flex items-center justify-center text-[8px] text-foreground font-bold">L</div>
-              <span className="text-xs text-text-secondary truncate">{item.content}</span>
-            </div>
-            <div className="flex items-center justify-between mt-auto pt-4 border-t border-surface-border/50">
-              <div className="flex gap-2 flex-wrap">
-                {parseTags(item.tags).map(tag => (
-                  <span key={tag} className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#{tag}</span>
-                ))}
-              </div>
-              <span className="text-[10px] text-text-secondary">{item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</span>
-            </div>
-          </div>
-        );
-      case 'idea':
-      case 'resource':
-        return (
-          <div key={item.id} className="bg-surface-dark border border-surface-border rounded-xl p-0 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
-            <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button className="p-1.5 bg-background-dark/80 backdrop-blur-sm rounded-md text-foreground hover:bg-primary hover:text-background-dark transition-colors">
-                <MoreVertical className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="h-32 w-full relative overflow-hidden bg-surface-border">
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url("${item.content}")` }}></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-surface-dark to-transparent"></div>
-              <div className="absolute bottom-2 left-3 p-1.5 bg-rose-500/20 backdrop-blur-md rounded-lg text-rose-400 border border-rose-500/20">
-                <ImageIcon className="w-3 h-3" />
-              </div>
-            </div>
-            <div className="p-4 flex flex-col flex-1">
-              <h3 className="text-foreground font-bold text-sm mb-1 line-clamp-1 font-display">{item.title}</h3>
-              <p className="text-text-secondary text-xs line-clamp-2 mb-auto">Media captured</p>
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-surface-border/50">
-                <div className="flex gap-2 flex-wrap">
-                  {parseTags(item.tags).map(tag => (
-                    <span key={tag} className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#{tag}</span>
-                  ))}
-                </div>
-                <span className="text-[10px] text-text-secondary">{item.created_at ? new Date(item.created_at).toLocaleDateString() : ''}</span>
-              </div>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="flex-1 flex flex-col h-full bg-background-dark">
       {/* Header */}
@@ -113,16 +11,16 @@ export default function VaultPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground tracking-tight font-display">Knowledge Vault</h1>
-            <p className="text-text-secondary text-sm">{vaultItems.length} items • {allTags.length} tags</p>
+            <p className="text-text-secondary text-sm">1,204 items • 45 tags</p>
           </div>
         </div>
-
+        
         <div className="flex items-center gap-4">
           <div className="relative group">
             <Search className="w-4 h-4 text-text-secondary absolute left-3 top-1/2 -translate-y-1/2 group-focus-within:text-primary transition-colors" />
-            <input
-              type="text"
-              placeholder="Search vault..."
+            <input 
+              type="text" 
+              placeholder="Search vault..." 
               className="bg-surface-dark border border-surface-border rounded-lg pl-10 pr-4 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 w-64 transition-all placeholder:text-text-secondary"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
@@ -130,7 +28,7 @@ export default function VaultPage() {
               <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-surface-border text-text-secondary rounded border border-surface-border/50">K</kbd>
             </div>
           </div>
-
+          
           <div className="flex items-center bg-surface-dark border border-surface-border rounded-lg p-1">
             <button className="p-1.5 rounded-md bg-surface-border text-foreground shadow-sm">
               <LayoutGrid className="w-4 h-4" />
@@ -143,7 +41,7 @@ export default function VaultPage() {
           <button className="p-2 rounded-lg border border-surface-border bg-surface-dark text-text-secondary hover:text-foreground hover:border-primary/30 transition-all">
             <Filter className="w-4 h-4" />
           </button>
-
+          
           <button className="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-foreground hover:text-background-dark transition-colors shadow-lg shadow-primary/20">
             <Plus className="w-4 h-4" />
             <span>New Entry</span>
@@ -162,14 +60,14 @@ export default function VaultPage() {
                   <Folder className="w-4 h-4" />
                   <span>All Items</span>
                 </div>
-                <span className="text-xs">{vaultItems.length}</span>
+                <span className="text-xs">1.2k</span>
               </a>
               <a href="#" className="flex items-center justify-between px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4" />
                   <span>Favorites</span>
                 </div>
-                <span className="text-xs">0</span>
+                <span className="text-xs">24</span>
               </a>
               <a href="#" className="flex items-center justify-between px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm">
                 <div className="flex items-center gap-2">
@@ -180,17 +78,53 @@ export default function VaultPage() {
             </nav>
           </div>
 
+          <div className="p-4 border-t border-surface-border">
+            <div className="flex items-center justify-between mb-3 px-2">
+              <h3 className="text-xs font-bold text-text-secondary uppercase tracking-wider">Folders</h3>
+              <button className="text-text-secondary hover:text-primary transition-colors"><Plus className="w-3 h-3" /></button>
+            </div>
+            <nav className="flex flex-col gap-1">
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
+                <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                <Folder className="w-4 h-4 text-blue-400" />
+                <span>Projects</span>
+              </a>
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
+                <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                <Folder className="w-4 h-4 text-emerald-400" />
+                <span>Learning</span>
+              </a>
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
+                <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                <Folder className="w-4 h-4 text-rose-400" />
+                <span>Inspiration</span>
+              </a>
+              <a href="#" className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-text-secondary hover:bg-surface-border/50 hover:text-foreground transition-colors text-sm group">
+                <ChevronRight className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                <Folder className="w-4 h-4 text-amber-400" />
+                <span>Archive</span>
+              </a>
+            </nav>
+          </div>
+
           <div className="p-4 border-t border-surface-border flex-1">
             <h3 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-3 px-2">Tags</h3>
             <div className="flex flex-wrap gap-2 px-2">
-              {allTags.map(tag => (
-                <span key={tag} className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
-                  <Hash className="w-3 h-3" /> {tag}
-                </span>
-              ))}
-              {allTags.length === 0 && (
-                <span className="text-xs text-text-secondary px-2">No tags found.</span>
-              )}
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+                <Hash className="w-3 h-3" /> architecture
+              </span>
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+                <Hash className="w-3 h-3" /> design
+              </span>
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+                <Hash className="w-3 h-3" /> ai
+              </span>
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+                <Hash className="w-3 h-3" /> notes
+              </span>
+              <span className="px-2 py-1 rounded-md bg-surface-border text-xs text-text-secondary hover:text-foreground hover:bg-surface-border/80 cursor-pointer transition-colors flex items-center gap-1">
+                <Hash className="w-3 h-3" /> ideas
+              </span>
             </div>
           </div>
         </aside>
@@ -201,13 +135,143 @@ export default function VaultPage() {
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
-            {vaultItems.map(item => renderVaultItem(item))}
-            {vaultItems.length === 0 && (
-              <div className="col-span-full flex flex-col items-center justify-center text-text-secondary py-20">
-                <Database className="w-12 h-12 mb-4 opacity-20" />
-                <p>Your Knowledge Vault is empty.</p>
+            {/* Note Card */}
+            <div className="bg-surface-dark border border-surface-border rounded-xl p-5 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="flex justify-between items-start mb-3">
+                <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                  <MoreVertical className="w-4 h-4" />
+                </button>
               </div>
-            )}
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">Meeting Notes: Q4 Strategy Planning</h3>
+              <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
+                Discussed the new product launch timeline. Key action items include finalizing the design system and setting up the staging environment. Need to follow up with marketing on the campaign assets.
+              </p>
+              <div className="flex items-center justify-between mt-auto pt-4 border-t border-surface-border/50">
+                <div className="flex gap-2">
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#notes</span>
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#work</span>
+                </div>
+                <span className="text-[10px] text-text-secondary">2h ago</span>
+              </div>
+            </div>
+
+            {/* Link Card */}
+            <div className="bg-surface-dark border border-surface-border rounded-xl p-5 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="flex justify-between items-start mb-3">
+                <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+                  <LinkIcon className="w-4 h-4" />
+                </div>
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                  <MoreVertical className="w-4 h-4" />
+                </button>
+              </div>
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">The Future of Generative UI</h3>
+              <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
+                An interesting article on how AI models are moving beyond text generation to creating dynamic user interfaces on the fly. Good reference for the upcoming project.
+              </p>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-4 h-4 rounded-full bg-surface-border flex items-center justify-center text-[8px]">W</div>
+                <span className="text-xs text-text-secondary truncate">wired.com/story/generative-ui</span>
+              </div>
+              <div className="flex items-center justify-between mt-auto pt-4 border-t border-surface-border/50">
+                <div className="flex gap-2">
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#ai</span>
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#design</span>
+                </div>
+                <span className="text-[10px] text-text-secondary">Yesterday</span>
+              </div>
+            </div>
+
+            {/* Image Card */}
+            <div className="bg-surface-dark border border-surface-border rounded-xl p-0 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
+              <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="p-1.5 bg-background-dark/80 backdrop-blur-sm rounded-md text-foreground hover:bg-primary hover:text-background-dark transition-colors">
+                  <MoreVertical className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="h-32 w-full relative overflow-hidden bg-surface-border">
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: 'url("https://picsum.photos/seed/cyberpunk/400/300")' }}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-dark to-transparent"></div>
+                <div className="absolute bottom-2 left-3 p-1.5 bg-rose-500/20 backdrop-blur-md rounded-lg text-rose-400 border border-rose-500/20">
+                  <ImageIcon className="w-3 h-3" />
+                </div>
+              </div>
+              <div className="p-4 flex flex-col flex-1">
+                <h3 className="text-foreground font-bold text-sm mb-1 line-clamp-1 font-display">Cyberpunk Cityscape Reference</h3>
+                <p className="text-text-secondary text-xs line-clamp-2 mb-auto">
+                  Moodboard inspiration for the new landing page hero section. Love the neon accents.
+                </p>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-surface-border/50">
+                  <div className="flex gap-2">
+                    <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#inspiration</span>
+                  </div>
+                  <span className="text-[10px] text-text-secondary">Oct 20</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Note Card */}
+            <div className="bg-surface-dark border border-surface-border rounded-xl p-5 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="flex justify-between items-start mb-3">
+                <div className="p-2 bg-amber-500/10 rounded-lg text-amber-400">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                  <MoreVertical className="w-4 h-4" />
+                </button>
+              </div>
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">App Architecture Ideas</h3>
+              <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1 font-mono bg-background-dark p-2 rounded border border-surface-border/50">
+                {`interface VaultItem {
+  id: string;
+  type: 'note' | 'link' | 'image';
+  content: string;
+  tags: string[];
+}`}
+              </p>
+              <div className="flex items-center justify-between mt-auto pt-4 border-t border-surface-border/50">
+                <div className="flex gap-2">
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#code</span>
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#architecture</span>
+                </div>
+                <span className="text-[10px] text-text-secondary">Oct 18</span>
+              </div>
+            </div>
+
+             {/* Link Card */}
+             <div className="bg-surface-dark border border-surface-border rounded-xl p-5 hover:border-primary/50 transition-all group cursor-pointer flex flex-col h-64 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="flex justify-between items-start mb-3">
+                <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+                  <LinkIcon className="w-4 h-4" />
+                </div>
+                <button className="text-text-secondary hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                  <MoreVertical className="w-4 h-4" />
+                </button>
+              </div>
+              <h3 className="text-foreground font-bold text-lg mb-2 line-clamp-2 font-display">Tailwind CSS v4 Documentation</h3>
+              <p className="text-text-secondary text-sm line-clamp-3 mb-4 flex-1">
+                The new engine is incredibly fast. Need to review the changes to the configuration file and the new CSS-first approach.
+              </p>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-4 h-4 rounded-full bg-[#38bdf8] flex items-center justify-center text-[8px] text-foreground font-bold">T</div>
+                <span className="text-xs text-text-secondary truncate">tailwindcss.com/docs</span>
+              </div>
+              <div className="flex items-center justify-between mt-auto pt-4 border-t border-surface-border/50">
+                <div className="flex gap-2">
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#css</span>
+                  <span className="text-[10px] font-medium px-2 py-1 rounded bg-surface-border text-text-secondary">#dev</span>
+                </div>
+                <span className="text-[10px] text-text-secondary">Oct 15</span>
+              </div>
+            </div>
+
           </div>
         </main>
       </div>
